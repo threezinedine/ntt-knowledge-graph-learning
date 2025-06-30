@@ -1,9 +1,15 @@
 import { app, BrowserWindow } from 'electron';
-import reloader from 'electron-reloader';
-
-reloader(module);
 
 function createWindow() {
+	if (process.env.NODE_ENV === 'development') {
+		console.log('Development mode');
+		require('electron-reloader')(module, {
+			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}'],
+		});
+	} else {
+		console.log('Production mode');
+	}
+
 	const mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
