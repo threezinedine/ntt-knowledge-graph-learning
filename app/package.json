@@ -6,6 +6,7 @@
 		"compile:electron": "tsc --project ./loader/tsconfig.json",
 		"dev": "npm run compile:ui && npm run compile:electron && electron .",
 		"compile:ui": "webpack --config webpack.config.js",
+		"compile:ui:watch": "nodemon --config nodemon.ui.json",
 		"build": "electron-builder"
 	},
 	"dependencies": {
@@ -23,6 +24,8 @@
 		"babel-loader": "^10.0.0",
 		"electron": "^37.1.0",
 		"electron-builder": "^26.0.12",
+		"electron-reloader": "^1.2.3",
+		"nodemon": "^3.1.10",
 		"typescript": "^5.8.3",
 		"webpack": "^5.99.9",
 		"webpack-cli": "^6.0.1"

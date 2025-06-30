@@ -3,7 +3,8 @@
 		"target": "ES6",
 		"module": "commonjs",
 		"outDir": "../dist-loader",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"esModuleInterop": true
 	},
 	"include": ["index.ts"]
 }
