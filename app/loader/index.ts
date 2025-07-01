@@ -4,7 +4,7 @@ function createWindow() {
 	if (process.env.NODE_ENV.trim() === 'development') {
 		console.log('Development mode');
 		require('electron-reloader')(module, {
-			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}', 'assets/**/*', 'index.html'],
+			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}', 'assets/**/*', 'index.html', 'loader/**/*'],
 		});
 	} else {
 		console.log('Production mode');
@@ -13,6 +13,7 @@ function createWindow() {
 	const mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
+		autoHideMenuBar: true,
 		webPreferences: {
 			nodeIntegration: true,
 		},

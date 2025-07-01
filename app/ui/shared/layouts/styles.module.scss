@@ -1,11 +1,51 @@
 .main-layout {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 	background-color: rgb(72, 91, 107);
 
 	.main-layout__main {
 		background-color: rgb(107, 72, 72);
+		flex: 15;
+		display: flex;
+
+		.main-layout__main-content {
+			background-color: rgb(240, 189, 48);
+			flex: 1;
+			overflow: hidden;
+		}
+
+		.main-layout__main-sidebar-left,
+		.main-layout__main-sidebar-right {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.main-layout__main-sidebar-left {
+			background-color: rgb(72, 107, 72);
+			width: var(--left-sidebar-width);
+		}
+
+		.main-layout__main-sidebar-right {
+			background-color: rgb(107, 72, 72);
+			width: var(--right-sidebar-width);
+		}
+
+		.main-layout__main-col-resize {
+			position: absolute;
+			background-color: rgb(255, 255, 255);
+			width: 3px;
+			height: 100%;
+			cursor: col-resize;
+		}
 	}
 
 	.main-layout__footer {
-		background-color: rgb(72, 107, 72);
+		background-color: rgb(0, 0, 0);
+		flex: 1;
+
+		max-height: 3vh;
+		overflow: hidden;
 	}
 }
