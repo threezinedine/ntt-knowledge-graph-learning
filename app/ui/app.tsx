@@ -1,9 +1,9 @@
 import React from 'react';
-import { MainLayout } from '@/shared';
+import { MainLayout, Title } from '@/shared';
 
 function Application(): React.ReactElement {
 	return (
-		<MainLayout>
+		<MainLayout title={<Title />}>
 			<h1>Hello World</h1>
 		</MainLayout>
 	);

@@ -1,0 +1,34 @@
+.title {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+
+	.title__left {
+		flex: 1;
+	}
+
+	.title__center {
+		flex: 1;
+		-webkit-app-region: drag;
+	}
+
+	.title__right {
+		width: fit-content;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.title__right-button {
+			$button-padding: 1.25rem;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			padding-left: $button-padding;
+			padding-right: $button-padding;
+		}
+	}
+}

@@ -1,0 +1,17 @@
+.auto-size {
+	padding: auto;
+}
+
+.button {
+	display: inline-block;
+	cursor: pointer;
+	background-color: var(--button-color);
+	color: var(--text-color);
+
+	transition: all 0.2s ease-in-out;
+
+	&:hover {
+		background-color: var(--button-color-hover);
+		color: var(--text-color-hover);
+	}
+}
