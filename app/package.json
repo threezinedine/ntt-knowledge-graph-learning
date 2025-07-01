@@ -8,13 +8,16 @@
 		"compile:ui": "webpack --config webpack.config.js",
 		"compile:ui:watch": "nodemon --config nodemon.ui.json",
 		"build": "set NODE_ENV=production && electron-builder",
-		"test": "wdio run wdio.conf.ts"
+		"test": "npm run build && wdio run wdio.conf.ts"
 	},
 	"dependencies": {
+		"clsx": "^2.1.1",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0"
 	},
 	"devDependencies": {
+		"css-loader": "^7.1.2",
+		"style-loader": "^4.0.0",
 		"@babel/core": "^7.27.7",
 		"@babel/preset-env": "^7.27.2",
 		"@babel/preset-react": "^7.27.1",
@@ -31,6 +34,8 @@
 		"electron-builder": "^26.0.12",
 		"electron-reloader": "^1.2.3",
 		"nodemon": "^3.1.10",
+		"sass": "^1.89.2",
+		"sass-loader": "^16.0.5",
 		"typescript": "^5.8.3",
 		"wdio-electron-service": "^8.2.1",
 		"wdio-local-runner": "^5.0.0-alpha.7",

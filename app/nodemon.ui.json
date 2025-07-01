@@ -2,6 +2,6 @@
 	"verbose": true,
 	"ignore": ["loaders/**/*", "dist-ui/**/*", "dist-loader/**/*"],
 	"watch": ["ui/**/*"],
-	"ext": "ts,tsx,js,jsx,json",
+	"ext": "ts,tsx,js,jsx,json,scss",
 	"exec": "npm run compile:ui"
 }

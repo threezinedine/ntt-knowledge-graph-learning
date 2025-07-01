@@ -1,10 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 
 function createWindow() {
-	if (process.env.NODE_ENV === 'development') {
+	if (process.env.NODE_ENV.trim() === 'development') {
 		console.log('Development mode');
 		require('electron-reloader')(module, {
-			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}'],
+			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}', 'assets/**/*', 'index.html'],
 		});
 	} else {
 		console.log('Production mode');

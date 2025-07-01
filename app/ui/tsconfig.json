@@ -3,6 +3,10 @@
 		"target": "ES6",
 		"module": "commonjs",
 		"outDir": "../dist-ui",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./*"]
+		},
 		"skipLibCheck": true,
 		"jsx": "react-jsx",
 		"esModuleInterop": true
