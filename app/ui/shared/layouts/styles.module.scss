@@ -35,9 +35,15 @@
 		.main-layout__main-col-resize {
 			position: absolute;
 			background-color: rgb(255, 255, 255);
+			opacity: 0.5;
 			width: 3px;
 			height: 100%;
 			cursor: col-resize;
+			transition: opacity 0.1s linear;
+
+			&:hover {
+				opacity: 0.8;
+			}
 		}
 	}
 
