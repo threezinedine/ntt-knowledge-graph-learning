@@ -5,6 +5,7 @@ import { UIConfig } from '@/configs';
 
 interface MainLayoutProps {
 	children: React.ReactNode;
+	header?: React.ReactNode;
 	footer?: React.ReactNode;
 	leftSidebar?: React.ReactNode;
 	rightSidebar?: React.ReactNode;
@@ -12,7 +13,7 @@ interface MainLayoutProps {
 
 const uiConfig = UIConfig.getInstance();
 
-export default function MainLayout({ children, footer, leftSidebar, rightSidebar }: MainLayoutProps) {
+export default function MainLayout({ children, header, footer, leftSidebar, rightSidebar }: MainLayoutProps) {
 	function startResize(direction: 'left' | 'right' = 'left') {
 		return (e: React.MouseEvent<HTMLDivElement>) => {
 			const sidebarName = `main-layout__main-sidebar-${direction}`;
@@ -35,6 +36,7 @@ export default function MainLayout({ children, footer, leftSidebar, rightSidebar
 
 	return (
 		<div className={clsx(styles['main-layout'])}>
+			<div className={clsx(styles['main-layout__title'])}>{header}</div>
 			<div className={clsx(styles['main-layout__main'])}>
 				<div
 					className={clsx(styles['main-layout__main-sidebar-left'])}

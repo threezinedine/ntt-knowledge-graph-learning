@@ -14,7 +14,7 @@ function createWindow() {
 		width: 800,
 		height: 600,
 		autoHideMenuBar: true,
-		title: 'UI',
+		frame: false,
 		webPreferences: {
 			nodeIntegration: true,
 		},
