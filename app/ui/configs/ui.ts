@@ -5,6 +5,7 @@ export default class UIConfig {
 	public TextColor: string = 'rgb(150, 150, 150)';
 	public NormalButtonHoverColor: string = 'rgb(100, 100, 100)';
 	public CloseButtonHoverColor: string = 'rgb(200, 10, 10)';
+	public LogoColor: string = 'rgb(200, 200, 200)';
 
 	private static _instance: UIConfig;
 

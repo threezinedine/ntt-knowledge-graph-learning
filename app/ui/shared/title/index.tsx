@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as styles from './styles.module.scss';
+import { ReactComponent as Logo } from '@/assets/images/b-logo.svg';
 import clsx from 'clsx';
 import { Button } from '@/components';
 import UIConfig from '@/configs/ui';
@@ -27,7 +28,14 @@ export default function Title() {
 
 	return (
 		<div className={clsx(styles['title'])}>
-			<div className={clsx(styles['title__left'])}></div>
+			<div className={clsx(styles['title__left'])}>
+				<div
+					className={clsx(styles['title__left-logo'])}
+					style={{ '--logo-color': uiConfig.LogoColor } as React.CSSProperties}
+				>
+					<Logo />
+				</div>
+			</div>
 			<div className={clsx(styles['title__center'])}></div>
 			<div className={clsx(styles['title__right'])}>
 				<div className={clsx(styles['title__right-buttons'])}>

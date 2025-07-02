@@ -5,6 +5,26 @@
 
 	.title__left {
 		flex: 1;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding-left: 0.5rem;
+
+		.title__left-logo {
+			$logo-size: 1.75em;
+			-webkit-app-region: drag;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			height: 100%;
+
+			svg {
+				width: $logo-size;
+				height: $logo-size;
+				fill: var(--logo-color);
+			}
+		}
 	}
 
 	.title__center {
