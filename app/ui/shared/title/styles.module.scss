@@ -19,16 +19,35 @@
 		justify-content: center;
 		align-items: center;
 
-		.title__right-button {
-			$button-padding: 1.25rem;
+		.title__right-buttons {
+			.title__right-button {
+				padding: 0.2rem;
+				border-radius: 0.25rem;
+			}
 
+			margin-right: 0.75rem;
 			display: flex;
-			justify-content: center;
-			align-items: center;
-			width: 100%;
+			flex-direction: row;
+			gap: 0.5rem;
+		}
+
+		.title__right-windows-buttons {
+			display: flex;
+			flex-direction: row;
 			height: 100%;
-			padding-left: $button-padding;
-			padding-right: $button-padding;
+			width: fit-content;
+
+			.title__right-windows-button {
+				$button-padding: 1.25rem;
+
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 100%;
+				height: 100%;
+				padding-left: $button-padding;
+				padding-right: $button-padding;
+			}
 		}
 	}
 }

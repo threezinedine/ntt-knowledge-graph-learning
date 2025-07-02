@@ -7,13 +7,14 @@
 		"dev": "npm run compile:ui && npm run compile:electron && set NODE_ENV=development && electron .",
 		"compile:ui": "webpack --config webpack.config.js",
 		"compile:ui:watch": "nodemon --config nodemon.ui.json",
-		"build": "set NODE_ENV=production && electron-builder",
+		"build": "npm run compile:electron && npm run compile:ui && set NODE_ENV=production && electron-builder",
 		"test": "npm run build && wdio run wdio.conf.ts"
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
 		"react": "^19.1.0",
-		"react-dom": "^19.1.0"
+		"react-dom": "^19.1.0",
+		"zustand": "^5.0.6"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.27.7",

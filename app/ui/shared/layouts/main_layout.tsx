@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import * as styles from './styles.module.scss';
 import { UIConfig } from '@/configs';
+import { useSidebarStore } from '@/contexts';
 
 interface MainLayoutProps {
 	children: React.ReactNode;
@@ -14,6 +15,8 @@ interface MainLayoutProps {
 const uiConfig = UIConfig.getInstance();
 
 export default function MainLayout({ children, title, footer, leftSidebar, rightSidebar }: MainLayoutProps) {
+	const { isLeftSidebarOpen, isRightSidebarOpen } = useSidebarStore();
+
 	function startResize(direction: 'left' | 'right' = 'left') {
 		return (e: React.MouseEvent<HTMLDivElement>) => {
 			const sidebarName = `main-layout__main-sidebar-${direction}`;
@@ -39,7 +42,7 @@ export default function MainLayout({ children, title, footer, leftSidebar, right
 			<div className={clsx(styles['main-layout__title'])}>{title}</div>
 			<div className={clsx(styles['main-layout__main'])}>
 				<div
-					className={clsx(styles['main-layout__main-sidebar-left'])}
+					className={clsx(styles['main-layout__main-sidebar-left'], !isLeftSidebarOpen && styles['closed'])}
 					style={{ '--left-sidebar-width': `${uiConfig.LeftSidebarWidthInPixels}px` } as React.CSSProperties}
 				>
 					{leftSidebar}
@@ -51,7 +54,7 @@ export default function MainLayout({ children, title, footer, leftSidebar, right
 				</div>
 				<div className={clsx(styles['main-layout__main-content'])}>{children}</div>
 				<div
-					className={clsx(styles['main-layout__main-sidebar-right'])}
+					className={clsx(styles['main-layout__main-sidebar-right'], !isRightSidebarOpen && styles['closed'])}
 					style={
 						{ '--right-sidebar-width': `${uiConfig.RightSidebarWidthInPixels}px` } as React.CSSProperties
 					}

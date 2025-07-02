@@ -4,12 +4,16 @@ import registerAllHandlers from './ipcHandlers';
 import { EVENT_WINDOW_IS_MAXIMIZED, EVENT_WINDOW_IS_UNMAXIMIZED } from './events';
 
 function createWindow() {
-	if (process.env.NODE_ENV.trim() === 'development') {
-		console.log('Development mode');
-		require('electron-reloader')(module, {
-			watch: ['dist-ui/**/*.{js,jsx,ts,tsx}', 'assets/**/*', 'index.html', 'loader/**/*'],
-		});
-	} else {
+	try {
+		if (process.env.NODE_ENV.trim() === 'development') {
+			console.log('Development mode');
+			require('electron-reloader')(module, {
+				watch: ['dist-ui/**/*.{js,jsx,ts,tsx}', 'assets/**/*', 'index.html', 'loader/**/*'],
+			});
+		} else {
+			console.log('Production mode');
+		}
+	} catch {
 		console.log('Production mode');
 	}
 

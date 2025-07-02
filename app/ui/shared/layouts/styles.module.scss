@@ -35,6 +35,10 @@ $main-background-color: rgb(15, 15, 15);
 		.main-layout__main-sidebar-right {
 			position: relative;
 			overflow: hidden;
+
+			&.closed {
+				display: none !important;
+			}
 		}
 
 		.main-layout__main-sidebar-left {

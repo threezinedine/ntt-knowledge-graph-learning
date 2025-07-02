@@ -3,10 +3,12 @@
 }
 
 .button {
-	display: inline-block;
+	display: flex;
 	cursor: pointer;
 	background-color: var(--button-color);
 	color: var(--text-color);
+	justify-content: center;
+	align-items: center;
 
 	transition: all 0.2s ease-in-out;
 
