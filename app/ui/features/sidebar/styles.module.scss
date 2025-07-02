@@ -1,0 +1,40 @@
+$font-size: 0.8rem;
+
+.sidebar {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.sidegroup {
+		display: block;
+
+		&-header {
+			padding: 0.5rem;
+			color: var(--text-color);
+			font-size: $font-size;
+			cursor: pointer;
+
+			&__icon {
+				margin-right: 0.5rem;
+				width: 0.5rem;
+				text-align: center;
+			}
+
+			span {
+				font-family: 'Roboto';
+				user-select: none;
+				text-transform: uppercase;
+			}
+		}
+
+		&-content {
+			height: calc(var(--content-height) * var(--height-in-percent));
+			transition: all 0.4s ease-in-out;
+			overflow: hidden;
+
+			&.display-none {
+				flex: 0;
+			}
+		}
+	}
+}

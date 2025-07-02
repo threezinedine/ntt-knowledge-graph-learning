@@ -86,7 +86,7 @@ export default function Title() {
 							}
 						}}
 					>
-						<i className={clsx('fa-solid', isMaximized ? 'fa-window-maximize' : 'fa-window-restore')} />
+						<i className={clsx('fa-solid', isMaximized ? 'fa-window-restore' : 'fa-window-maximize')} />
 					</Button>
 					<Button
 						className={clsx(styles['title__right-windows-button'])}
