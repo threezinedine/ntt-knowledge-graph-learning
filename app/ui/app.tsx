@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainLayout, Title } from '@/shared';
+import { MainLayout, Title } from '@/features';
 
 function Application(): React.ReactElement {
 	return (
