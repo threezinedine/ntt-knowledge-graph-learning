@@ -73,14 +73,15 @@ export default function SideGroup({ title, children, sideGroupIndex = 0 }: SideG
 					<div className={styles['sidegroup-header__resize-handle']} onMouseDown={handleResizeStart}></div>
 				)}
 				<div className={styles['sidegroup-header__content']} onClick={handleToggleGroup}>
-					<i
-						className={clsx(
-							'fa-solid',
-							groupInfos[sideGroupIndex]?.isOpen ? 'fa-chevron-down' : 'fa-chevron-right',
-							styles['sidegroup-header__icon'],
-						)}
-					></i>
-					<span>{title}</span>
+					<div className={styles['sidegroup-header__content__icon']}>
+						<i
+							className={clsx(
+								'fa-solid',
+								groupInfos[sideGroupIndex]?.isOpen ? 'fa-chevron-down' : 'fa-chevron-right',
+							)}
+						></i>
+					</div>
+					<div className={styles['sidegroup-header__content__content']}>{title}</div>
 				</div>
 			</div>
 			<div

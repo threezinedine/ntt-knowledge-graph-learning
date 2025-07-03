@@ -36,16 +36,20 @@ $resize-handle-hover-height: 0.3rem;
 				}
 			}
 
-			&__icon {
-				margin-right: 0.5rem;
-				width: 0.5rem;
-				text-align: center;
-			}
+			&__content {
+				display: flex;
+				gap: 0.5rem;
 
-			span {
-				font-family: 'Roboto';
-				user-select: none;
-				text-transform: uppercase;
+				&__icon {
+					width: 0.5rem;
+					text-align: center;
+				}
+
+				&__content {
+					font-family: 'Roboto';
+					user-select: none;
+					text-transform: uppercase;
+				}
 			}
 		}
 
