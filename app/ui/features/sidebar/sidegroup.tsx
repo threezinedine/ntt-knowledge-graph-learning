@@ -3,6 +3,7 @@ import * as styles from './styles.module.scss';
 import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import useSidebarGroup from './sidebargroup';
+import { calculateContentHeight } from './sidebarutil';
 
 export interface SideGroupProps {
 	title: string;
@@ -13,30 +14,47 @@ export interface SideGroupProps {
 const uiConfig = UIConfig.getInstance();
 
 export default function SideGroup({ title, children, sideGroupIndex = 0 }: SideGroupProps) {
-	const { groupHeightsInPercent, toggleGroup } = useSidebarGroup();
+	const { groupInfos, toggleGroup, resizeGroup } = useSidebarGroup();
 	const [contentHeight, setContentHeight] = useState(0);
 
 	useEffect(() => {
-		calculateContentHeight();
-	}, [groupHeightsInPercent]);
-
-	function calculateContentHeight() {
-		const contents = document.querySelectorAll(`.${styles['sidegroup-header']}`);
-		if (!contents) return;
-
-		const culHeaderHeight = Array.from(contents).reduce((acc, curr) => acc + curr.clientHeight, 0);
-
-		const sidebar = document.querySelector(`.${styles['sidebar']}`);
-		if (!sidebar) return;
-
-		const sidebarHeight = sidebar.clientHeight;
-
-		setContentHeight(sidebarHeight - culHeaderHeight);
-	}
+		calculateContentHeight(styles, (contentHeight) => {
+			setContentHeight(contentHeight);
+		});
+	}, [groupInfos]);
 
 	function handleToggleGroup(e: React.MouseEvent<HTMLDivElement>) {
-		calculateContentHeight();
+		calculateContentHeight(styles, (contentHeight) => {
+			setContentHeight(contentHeight);
+		});
 		toggleGroup(sideGroupIndex);
+	}
+
+	function handleResizeStart(e: React.MouseEvent<HTMLDivElement>) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		function handleResizeMove(e: MouseEvent) {
+			resizeGroup(sideGroupIndex, e.movementY);
+		}
+
+		function handleResizeEnd(e: MouseEvent) {
+			e.preventDefault();
+			e.stopPropagation();
+			document.removeEventListener('mousemove', handleResizeMove);
+			document.removeEventListener('mouseup', handleResizeEnd);
+		}
+
+		document.addEventListener('mousemove', handleResizeMove);
+		document.addEventListener('mouseup', handleResizeEnd);
+	}
+
+	function canBeResized(): boolean {
+		if (!groupInfos[sideGroupIndex]?.isOpen) {
+			return false;
+		}
+
+		return groupInfos.some((info, index) => index < sideGroupIndex && info.isOpen);
 	}
 
 	return (
@@ -46,24 +64,29 @@ export default function SideGroup({ title, children, sideGroupIndex = 0 }: SideG
 				{
 					'--text-color': uiConfig.TextColor,
 					'--content-height': `${contentHeight}px`,
-					'--height-in-percent': groupHeightsInPercent[sideGroupIndex],
+					'--height': `${groupInfos[sideGroupIndex]?.height}px`,
 				} as React.CSSProperties
 			}
 		>
-			<div className={clsx(styles['sidegroup-header'])} onClick={handleToggleGroup}>
-				<i
-					className={clsx(
-						'fa-solid',
-						groupHeightsInPercent[sideGroupIndex] !== 0 ? 'fa-chevron-down' : 'fa-chevron-right',
-						styles['sidegroup-header__icon'],
-					)}
-				></i>
-				<span>{title}</span>
+			<div className={clsx(styles['sidegroup-header'])}>
+				{canBeResized() && (
+					<div className={styles['sidegroup-header__resize-handle']} onMouseDown={handleResizeStart}></div>
+				)}
+				<div className={styles['sidegroup-header__content']} onClick={handleToggleGroup}>
+					<i
+						className={clsx(
+							'fa-solid',
+							groupInfos[sideGroupIndex]?.isOpen ? 'fa-chevron-down' : 'fa-chevron-right',
+							styles['sidegroup-header__icon'],
+						)}
+					></i>
+					<span>{title}</span>
+				</div>
 			</div>
 			<div
 				className={clsx(
 					styles['sidegroup-content'],
-					groupHeightsInPercent[sideGroupIndex] === 0 && styles['display-none'],
+					!groupInfos[sideGroupIndex]?.isOpen && styles['display-none'],
 				)}
 			>
 				{children}

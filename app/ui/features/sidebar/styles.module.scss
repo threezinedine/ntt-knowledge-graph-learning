@@ -1,5 +1,8 @@
 $font-size: 0.8rem;
 
+$resize-handle-height: 0.1rem;
+$resize-handle-hover-height: 0.3rem;
+
 .sidebar {
 	display: flex;
 	flex-direction: column;
@@ -9,10 +12,29 @@ $font-size: 0.8rem;
 		display: block;
 
 		&-header {
+			position: relative;
 			padding: 0.5rem;
 			color: var(--text-color);
 			font-size: $font-size;
 			cursor: pointer;
+
+			&__resize-handle {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: $resize-handle-height;
+				background-color: transparent;
+				cursor: row-resize;
+				transition: all 0.1s linear;
+
+				&:hover {
+					top: -$resize-handle-height;
+					height: $resize-handle-hover-height;
+					background-color: var(--text-color);
+					opacity: 0.5;
+				}
+			}
 
 			&__icon {
 				margin-right: 0.5rem;
@@ -28,7 +50,7 @@ $font-size: 0.8rem;
 		}
 
 		&-content {
-			height: calc(var(--content-height) * var(--height-in-percent));
+			height: var(--height);
 			transition: all 0.4s ease-in-out;
 			overflow: hidden;
 
