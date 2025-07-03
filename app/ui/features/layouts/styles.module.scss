@@ -13,7 +13,7 @@ $main-background-color: rgb(15, 15, 15);
 	flex-direction: column;
 	background-color: $main-background-color;
 
-	.main-layout__title {
+	&__title {
 		flex: 1;
 		overflow: hidden;
 		max-height: $title-height;
@@ -22,17 +22,17 @@ $main-background-color: rgb(15, 15, 15);
 		border-bottom: 1px solid $border-color;
 	}
 
-	.main-layout__main {
+	&__main {
 		flex: 15;
 		display: flex;
 
-		.main-layout__main-content {
+		&-content {
 			flex: 1;
 			overflow: hidden;
 		}
 
-		.main-layout__main-sidebar-left,
-		.main-layout__main-sidebar-right {
+		&-sidebar-left,
+		&-sidebar-right {
 			position: relative;
 			overflow: hidden;
 
@@ -41,15 +41,15 @@ $main-background-color: rgb(15, 15, 15);
 			}
 		}
 
-		.main-layout__main-sidebar-left {
+		&-sidebar-left {
 			width: var(--left-sidebar-width);
 		}
 
-		.main-layout__main-sidebar-right {
+		&-sidebar-right {
 			width: var(--right-sidebar-width);
 		}
 
-		.main-layout__main-col-resize {
+		&-col-resize {
 			position: absolute;
 			background-color: rgb(255, 255, 255);
 			opacity: 0.5;
@@ -64,7 +64,7 @@ $main-background-color: rgb(15, 15, 15);
 		}
 	}
 
-	.main-layout__footer {
+	&__footer {
 		flex: 1;
 		max-height: $footer-height;
 		min-height: $footer-height;
