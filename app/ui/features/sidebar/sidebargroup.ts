@@ -10,115 +10,93 @@ interface GroupInfo {
 }
 
 interface SidebarGroupState {
-	groupCount: number;
-	groupInfos: GroupInfo[];
-	minHeight: number;
-	totalHeight: number;
-	toggleGroup: (groupIndex: number) => void;
-	resizeGroup: (groupIndex: number, movementY: number) => void;
-	changeTotalHeight: (totalHeight: number) => void;
+	isModified: boolean;
 
-	initializeGroupCount: (groupCount: number, totalHeight: number) => void;
+	modify: () => void;
 }
 
-const useSidebarGroup = create<SidebarGroupState>((set) => ({
-	groupCount: 0,
-	minHeight: 100,
-	groupInfos: [],
-	totalHeight: 0,
-	toggleGroup: (groupIndex: number) => {
-		set((state) => {
-			const hasAnyGroupOpen = state.groupInfos.some((info) => info.isOpen);
+export class SidebarGroupInfo {
+	private groupCount: number;
+	private minHeight: number;
+	private totalHeight: number;
+	public groupInfos: GroupInfo[];
 
-			if (!hasAnyGroupOpen) {
-				state.groupInfos[groupIndex].isOpen = true;
-				state.groupInfos[groupIndex].height = state.totalHeight;
-				return { groupInfos: JSON.parse(JSON.stringify(state.groupInfos)) };
+	constructor(groupCount: number, totalHeight: number) {
+		this.groupCount = groupCount;
+		this.minHeight = (totalHeight / groupCount) * MIN_HEIGHT_RATIO;
+		this.totalHeight = totalHeight;
+		this.groupInfos = [];
+
+		for (let i = 0; i < groupCount; i++) {
+			this.groupInfos[i] = {
+				height: 0,
+				isOpen: false,
+				previousHeight: 0,
+			};
+		}
+	}
+
+	toggleGroup(groupIndex: number) {
+		const hasAnyGroupOpen = this.groupInfos.some((info) => info.isOpen);
+
+		if (!hasAnyGroupOpen) {
+			this.groupInfos[groupIndex].isOpen = true;
+			this.groupInfos[groupIndex].height = this.totalHeight;
+			return { groupInfos: JSON.parse(JSON.stringify(this.groupInfos)) };
+		}
+
+		const isGroupOpen = this.groupInfos[groupIndex].isOpen;
+		const minHeight = this.minHeight;
+		const groupInfos = this.groupInfos;
+
+		const groupHeights = groupInfos.map((info) => info.height);
+		if (isGroupOpen) {
+			groupInfos[groupIndex].previousHeight = groupInfos[groupIndex].height;
+			groupHeights[groupIndex] = 0;
+		} else {
+			if (groupInfos[groupIndex].previousHeight === 0) {
+				groupInfos[groupIndex].previousHeight = minHeight;
 			}
+			groupHeights[groupIndex] = groupInfos[groupIndex].previousHeight;
+		}
 
-			const isGroupOpen = state.groupInfos[groupIndex].isOpen;
-			const minHeight = state.minHeight;
-			const groupInfos = state.groupInfos;
+		groupInfos[groupIndex].isOpen = !isGroupOpen;
 
-			const groupHeights = groupInfos.map((info) => info.height);
-			if (isGroupOpen) {
-				groupInfos[groupIndex].previousHeight = groupInfos[groupIndex].height;
-				groupHeights[groupIndex] = 0;
-			} else {
-				if (groupInfos[groupIndex].previousHeight === 0) {
-					groupInfos[groupIndex].previousHeight = minHeight;
-				}
-				groupHeights[groupIndex] = groupInfos[groupIndex].previousHeight;
-			}
+		const newGroupHeights = realignSidebarGroupHeights(groupHeights, minHeight, this.totalHeight, groupIndex);
 
-			groupInfos[groupIndex].isOpen = !isGroupOpen;
-
-			const newGroupHeights = realignSidebarGroupHeights(groupHeights, minHeight, state.totalHeight, groupIndex);
-
-			groupInfos.forEach((info, index) => {
-				info.height = newGroupHeights[index];
-			});
-
-			return { ...state, groupInfos: JSON.parse(JSON.stringify(groupInfos)) };
+		groupInfos.forEach((info, index) => {
+			info.height = newGroupHeights[index];
 		});
-	},
+	}
 
-	resizeGroup: (groupIndex: number, movementY: number) => {
-		set((state) => {
-			const groupInfos = state.groupInfos;
-			const groupHeights = groupInfos.map((info) => info.height);
+	resizeGroup(groupIndex: number, movementY: number) {
+		const groupInfos = this.groupInfos;
+		const groupHeights = groupInfos.map((info) => info.height);
 
-			groupHeights[groupIndex] -= movementY;
+		groupHeights[groupIndex] -= movementY;
 
-			const newGroupHeights = realignSidebarGroupHeights(
-				groupHeights,
-				state.minHeight,
-				state.totalHeight,
-				groupIndex,
-			);
+		const newGroupHeights = realignSidebarGroupHeights(groupHeights, this.minHeight, this.totalHeight, groupIndex);
 
-			groupInfos.forEach((info, index) => {
-				info.height = newGroupHeights[index];
-			});
-
-			return { ...state, groupInfos: JSON.parse(JSON.stringify(groupInfos)) };
+		groupInfos.forEach((info, index) => {
+			info.height = newGroupHeights[index];
 		});
-	},
-	changeTotalHeight: (totalHeight: number) => {
-		set((state) => {
-			const previousTotalHeight = state.totalHeight;
-			const ratio = totalHeight / previousTotalHeight;
+	}
 
-			const newGroupInfos = state.groupInfos.map((info) => {
-				return {
-					...info,
-					height: info.height * ratio,
-				};
-			});
+	changeTotalHeight(totalHeight: number) {
+		const ratio = totalHeight / this.totalHeight;
+		this.totalHeight = totalHeight;
+		this.minHeight = (totalHeight / this.groupCount) * MIN_HEIGHT_RATIO;
 
-			const minHeight = (totalHeight / state.groupCount) * MIN_HEIGHT_RATIO;
-
-			return { ...state, groupInfos: newGroupInfos, totalHeight, minHeight };
+		this.groupInfos.forEach((info) => {
+			info.height *= ratio;
 		});
-	},
+	}
+}
 
-	initializeGroupCount: (groupCount: number, totalHeight: number) => {
-		set((state) => {
-			const newGroupInfos: GroupInfo[] = Array(groupCount);
+export const useSidebarGroup = create<SidebarGroupState>((set) => ({
+	isModified: false,
 
-			for (let i = 0; i < groupCount; i++) {
-				newGroupInfos[i] = {
-					height: 0,
-					isOpen: false,
-					previousHeight: 0,
-				};
-			}
-
-			const minHeight = (totalHeight / groupCount) * MIN_HEIGHT_RATIO;
-
-			return { ...state, groupCount, minHeight, groupInfos: newGroupInfos, totalHeight };
-		});
+	modify: () => {
+		set((state) => ({ isModified: !state.isModified }));
 	},
 }));
-
-export default useSidebarGroup;

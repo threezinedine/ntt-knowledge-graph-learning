@@ -54,12 +54,14 @@ $resize-handle-hover-height: 0.3rem;
 		}
 
 		&-content {
-			height: var(--height);
-			transition: all 0.4s ease-in-out;
 			overflow: hidden;
 
 			&.display-none {
 				flex: 0;
+			}
+
+			&.transition {
+				transition: all 0.4s ease-in-out;
 			}
 		}
 	}

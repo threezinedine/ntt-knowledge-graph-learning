@@ -74,7 +74,7 @@ export function realignSidebarGroupHeights(
 	return newGroupHeights;
 }
 
-export function calculateContentHeight(styles: Record<string, string>, callback: (contentHeight: number) => void) {
+export function calculateTotalContentHeight(styles: Record<string, string>, callback: (contentHeight: number) => void) {
 	const contents = document.querySelectorAll(`.${styles['sidegroup-header']}`);
 	if (!contents) return;
 
