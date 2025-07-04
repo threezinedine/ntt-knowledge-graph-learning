@@ -1,0 +1,42 @@
+.content-system {
+	height: 100%;
+
+	&-header {
+		.tab-container {
+			user-select: none;
+			display: flex;
+
+			&-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				border: 0.2px solid var(--editor-background-color);
+				padding: 0.5rem;
+				max-width: 10rem;
+				min-width: 8rem;
+				cursor: pointer;
+				color: var(--text-color);
+
+				&__content {
+					text-wrap: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				&__close {
+					padding: 0.2rem 0.5rem;
+					border-radius: 0.2rem;
+				}
+
+				&.active {
+					background-color: var(--editor-background-color);
+				}
+			}
+		}
+	}
+
+	&-content {
+		background-color: var(--editor-background-color);
+		height: 100%;
+	}
+}

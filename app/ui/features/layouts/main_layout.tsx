@@ -38,7 +38,14 @@ export default function MainLayout({ children, title, footer, leftSidebar, right
 	}
 
 	return (
-		<div className={clsx(styles['main-layout'])}>
+		<div
+			className={clsx(styles['main-layout'])}
+			style={
+				{
+					'--application-background-color': uiConfig.ApplicationBackgroundColor,
+				} as React.CSSProperties
+			}
+		>
 			<div className={clsx(styles['main-layout__title'])}>{title}</div>
 			<div className={clsx(styles['main-layout__main'])}>
 				<div

@@ -4,7 +4,7 @@ import * as styles from './styles.module.scss';
 
 interface ButtonProps {
 	children?: React.ReactNode;
-	onClick?: () => void;
+	onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 	buttonColor?: string;
 	textColor?: string;
 	textColorHover?: string;
