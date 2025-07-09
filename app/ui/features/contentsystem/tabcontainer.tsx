@@ -13,7 +13,7 @@ interface TabContainerProps {
 	activeTab: string;
 	onTabClick?: (tab: TabItem) => Promise<void>;
 	onTabClose?: (tab: TabItem) => Promise<void>;
-	onTabReorder?: (tabNames: string[]) => Promise<void>;
+	onTabReorder?: (tabNames: string[], activeTabIndex: number) => Promise<void>;
 }
 
 const uiConfig = UIConfig.getInstance();
@@ -75,9 +75,17 @@ export default function TabContainer({ tabs, activeTab, onTabClick, onTabClose, 
 		if (target.classList.contains(styles['dragging'])) {
 			target.classList.remove(styles['dragging']);
 		}
+		const items = document.querySelectorAll(`.${styles['tab-container-item']}`) as NodeListOf<HTMLDivElement>;
+		const activeItem = Array.from(items).filter((item) => item.classList.contains(styles['active']));
+		let activeItemIndex = 0;
+
+		if (activeItem.length === 1) {
+			activeItemIndex = Number(activeItem[0]?.dataset.tabIndex);
+		}
+
 		const outputItemIndexes = clearDraggingOverClasses();
 		const outputItems = outputItemIndexes.map((tabIndex) => tabs[tabIndex].name);
-		onTabReorder?.(outputItems);
+		onTabReorder?.(outputItems, activeItemIndex);
 	}
 
 	function handleTabDragOver(e: React.DragEvent<HTMLDivElement>, tab: TabItem) {

@@ -10,7 +10,7 @@ interface ContentSystemProps {
 	children: React.ReactNode;
 	onTabChange?: (tab: TabItem) => Promise<void>;
 	onTabClose?: (tab: TabItem) => Promise<void>;
-	onTabReorder?: (tabNames: string[]) => Promise<void>;
+	onTabReorder?: (tabNames: string[], activeTabIndex: number) => Promise<void>;
 }
 
 const uiConfig = UIConfig.getInstance();
