@@ -16,6 +16,19 @@
 				min-width: 8rem;
 				cursor: pointer;
 				color: var(--text-color);
+				transition: opacity 0.2s ease-in-out;
+
+				&.dragging {
+					opacity: 0.5;
+				}
+
+				&.dragging-over-left {
+					border-left: 2px solid #fff;
+				}
+
+				&.dragging-over-right {
+					border-right: 2px solid #fff;
+				}
 
 				&__content {
 					text-wrap: nowrap;
@@ -26,10 +39,22 @@
 				&__close {
 					padding: 0.2rem 0.5rem;
 					border-radius: 0.2rem;
+					display: none;
+				}
+
+				&:hover {
+					.tab-container-item__close {
+						display: block !important;
+						opacity: 0.7 !important;
+					}
 				}
 
 				&.active {
 					background-color: var(--editor-background-color);
+
+					.tab-container-item__close {
+						display: block !important;
+					}
 				}
 			}
 		}

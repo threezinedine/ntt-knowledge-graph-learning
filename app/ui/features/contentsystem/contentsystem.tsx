@@ -10,11 +10,19 @@ interface ContentSystemProps {
 	children: React.ReactNode;
 	onTabChange?: (tab: TabItem) => Promise<void>;
 	onTabClose?: (tab: TabItem) => Promise<void>;
+	onTabReorder?: (tabNames: string[]) => Promise<void>;
 }
 
 const uiConfig = UIConfig.getInstance();
 
-export default function ContentSystem({ tabs, activeTab, children, onTabChange, onTabClose }: ContentSystemProps) {
+export default function ContentSystem({
+	tabs,
+	activeTab,
+	children,
+	onTabChange,
+	onTabClose,
+	onTabReorder,
+}: ContentSystemProps) {
 	return (
 		<div
 			className={clsx(styles['content-system'])}
@@ -26,9 +34,17 @@ export default function ContentSystem({ tabs, activeTab, children, onTabChange, 
 			}
 		>
 			<div className={clsx(styles['content-system-header'])}>
-				<TabContainer tabs={tabs} activeTab={activeTab} onTabClick={onTabChange} onTabClose={onTabClose} />
+				<TabContainer
+					tabs={tabs}
+					activeTab={activeTab}
+					onTabClick={onTabChange}
+					onTabClose={onTabClose}
+					onTabReorder={onTabReorder}
+				/>
 			</div>
-			<div className={clsx(styles['content-system-content'])}>{children}</div>
+			<div className={clsx(styles['content-system-content'])} draggable>
+				{children}
+			</div>
 		</div>
 	);
 }
