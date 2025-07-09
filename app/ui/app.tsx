@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MainLayout, Title, Sidebar, FileTree, Community, ContentSystem, TabItem } from '@/features';
+import { useNavigate } from 'react-router';
 
 function Application(): React.ReactElement {
 	const [activeTab, setActiveTab] = useState<string>('Tab 1');
@@ -8,6 +9,14 @@ function Application(): React.ReactElement {
 		{ name: 'Tab 2' },
 		{ name: 'Super Long Tab Name' },
 	]);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		window.electron.onShouldCreateNewProjectWindow(async () => {
+			navigate('/new-project');
+			return Promise.resolve();
+		});
+	}, []);
 
 	return (
 		<MainLayout

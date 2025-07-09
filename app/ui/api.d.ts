@@ -9,6 +9,14 @@ declare global {
 
 			onWindowIsMaximized: (callback: () => Promise<void>) => void;
 			onWindowIsUnmaximized: (callback: () => Promise<void>) => void;
+
+			onShouldCreateNewProjectWindow: (callback: () => Promise<void>) => void;
+
+			onCreateNewProjectWindow: () => Promise<void>;
+			onCloseNewProjectWindow: () => Promise<void>;
+
+			loadJsonFile: (filePath: string) => Promise<string | null>;
+			saveJsonFile: (filePath: string, data: string) => Promise<void>;
 		};
 	}
 }

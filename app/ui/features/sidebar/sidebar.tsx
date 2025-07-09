@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useSidebarGroup, SidebarGroupInfo } from './sidebargroup';
 import { calculateTotalContentHeight } from './sidebarutil';
 import { UIConfig } from '@/configs';
+import { useProject } from '@/contexts';
 
 interface SidebarProps {
 	groups: {
@@ -17,6 +18,8 @@ let sidebarGroupInfo: SidebarGroupInfo | null = null;
 export default function Sidebar({ groups }: SidebarProps) {
 	const { modify } = useSidebarGroup();
 	const uiConfig = UIConfig.getInstance();
+	const project = useProject((state) => state.project);
+	const dirty = useProject((state) => state.dirty);
 
 	function calculateContentHeights() {
 		const contents = document.querySelectorAll(`.${styles['sidegroup-content']}`) as NodeListOf<HTMLElement>;
@@ -89,53 +92,77 @@ export default function Sidebar({ groups }: SidebarProps) {
 		return sidebarGroupInfo?.groupInfos.some((info, index) => index < sideGroupIndex && info.isOpen);
 	}
 
+	function handleOpenCreateProjectWindow() {
+		window.electron.onCreateNewProjectWindow();
+	}
+
 	return (
 		<div className={clsx(styles['sidebar'])}>
-			{groups.map((group, index) => (
-				<div
-					key={index}
-					className={clsx(styles['sidegroup'])}
-					style={
-						{
-							'--text-color': uiConfig.TextColor,
-						} as React.CSSProperties
-					}
-				>
-					<div className={clsx(styles['sidegroup-header'])}>
-						{canBeResized(index) && (
+			<div className={styles['sidebar-groups']}>
+				{groups.map((group, index) => (
+					<div
+						key={index}
+						className={clsx(styles['sidegroup'])}
+						style={
+							{
+								'--text-color': uiConfig.TextColor,
+							} as React.CSSProperties
+						}
+					>
+						<div className={clsx(styles['sidegroup-header'])}>
+							{canBeResized(index) && (
+								<div
+									className={styles['sidegroup-header__resize-handle']}
+									onMouseDown={(e) => handleResizeStart(e, index)}
+								></div>
+							)}
 							<div
-								className={styles['sidegroup-header__resize-handle']}
-								onMouseDown={(e) => handleResizeStart(e, index)}
-							></div>
-						)}
-						<div
-							className={styles['sidegroup-header__content']}
-							onClick={(e) => handleToggleGroup(e, index)}
-						>
-							<div className={styles['sidegroup-header__content__icon']}>
-								<i
-									className={clsx(
-										'fa-solid',
-										sidebarGroupInfo?.groupInfos[index]?.isOpen
-											? 'fa-chevron-down'
-											: 'fa-chevron-right',
-									)}
-								></i>
+								className={styles['sidegroup-header__content']}
+								onClick={(e) => handleToggleGroup(e, index)}
+							>
+								<div className={styles['sidegroup-header__content__icon']}>
+									<i
+										className={clsx(
+											'fa-solid',
+											sidebarGroupInfo?.groupInfos[index]?.isOpen
+												? 'fa-chevron-down'
+												: 'fa-chevron-right',
+										)}
+									></i>
+								</div>
+								<div className={styles['sidegroup-header__content__content']}>{group.title}</div>
 							</div>
-							<div className={styles['sidegroup-header__content__content']}>{group.title}</div>
+						</div>
+						<div
+							className={clsx(
+								styles['sidegroup-content'],
+								styles['transition'],
+								!sidebarGroupInfo?.groupInfos[index]?.isOpen && styles['display-none'],
+							)}
+						>
+							{group.children}
 						</div>
 					</div>
-					<div
-						className={clsx(
-							styles['sidegroup-content'],
-							styles['transition'],
-							!sidebarGroupInfo?.groupInfos[index]?.isOpen && styles['display-none'],
-						)}
-					>
-						{group.children}
-					</div>
+				))}
+			</div>
+			<div
+				className={clsx(styles['sidebar-project-info'])}
+				style={
+					{
+						'--text-color': uiConfig.TextColor,
+						'--hover-background-color': uiConfig.NormalButtonHoverColor,
+					} as React.CSSProperties
+				}
+				onClick={handleOpenCreateProjectWindow}
+			>
+				<div className={styles['sidebar-project-info__name']}>
+					{project.projectName || 'Untitled'}
+					{dirty && <span>*</span>}
 				</div>
-			))}
+				<div className={styles['sidebar-project-info__actions']}>
+					<i className={clsx('fa-solid', 'fa-up-down')}></i>
+				</div>
+			</div>
 		</div>
 	);
 }

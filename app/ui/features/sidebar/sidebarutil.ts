@@ -80,7 +80,7 @@ export function calculateTotalContentHeight(styles: Record<string, string>, call
 
 	const culHeaderHeight = Array.from(contents).reduce((acc, curr) => acc + curr.clientHeight, 0);
 
-	const sidebar = document.querySelector(`.${styles['sidebar']}`);
+	const sidebar = document.querySelector(`.${styles['sidebar-groups']}`);
 	if (!sidebar) return;
 
 	const sidebarHeight = sidebar.clientHeight;
