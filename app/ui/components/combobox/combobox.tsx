@@ -11,9 +11,23 @@ interface ComboBoxProps {
 	selectedItem: ComboBoxItem | null;
 	items: ComboBoxItem[];
 	onSelect: (item: ComboBoxItem) => void;
+	className?: string;
+	lineHeight?: number;
+	textColor?: string;
+	backgroundColor?: string;
+	itemHoverColor?: string;
 }
 
-function ComboBox({ selectedItem, items, onSelect }: ComboBoxProps) {
+function ComboBox({
+	selectedItem,
+	items,
+	onSelect,
+	className,
+	lineHeight = 50,
+	textColor = '#444',
+	backgroundColor = 'rgb(100, 100, 100)',
+	itemHoverColor = 'rgb(140, 140, 140)',
+}: ComboBoxProps) {
 	const newSelectRef = useRef<HTMLDivElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +45,7 @@ function ComboBox({ selectedItem, items, onSelect }: ComboBoxProps) {
 			option.style.boxShadow = '0 1px 1px rgba(0,0,0,0.1)';
 			option.style.left = '0';
 			option.style.right = '0';
-			option.style.top = (i + 1) * (heightSelect + 1) + 'px';
+			option.style.top = (i + 1) * heightSelect + 'px';
 		}
 	}
 
@@ -70,6 +84,15 @@ function ComboBox({ selectedItem, items, onSelect }: ComboBoxProps) {
 
 		closeSelect();
 		setIsOpen(false);
+
+		const arrowItem = newSelectRef.current?.querySelector(`.${styles['selection']} > span`) as HTMLSpanElement;
+		if (!arrowItem) {
+			return;
+		}
+
+		const heightArrow = arrowItem.getBoundingClientRect().height;
+		const arrowItemtop = (lineHeight - heightArrow) / 2 - 1;
+		arrowItem.style.top = arrowItemtop + 'px';
 	}, []);
 
 	function handleToggle() {
@@ -88,14 +111,28 @@ function ComboBox({ selectedItem, items, onSelect }: ComboBoxProps) {
 
 	return (
 		<React.Fragment>
-			<div className={clsx(styles['new-select'])} ref={newSelectRef}>
+			<div
+				className={clsx(styles['new-select'], className)}
+				ref={newSelectRef}
+				style={
+					{
+						'--combobox-line-height': lineHeight + 'px',
+						'--combobox-text-color': textColor,
+						'--combobox-background-color': backgroundColor,
+						'--combobox-item-hover-color': itemHoverColor,
+					} as React.CSSProperties
+				}
+			>
 				<>
 					<div className={clsx(styles['selection'])} onClick={handleToggle}>
-						<p>
-							<span></span>
-							<i></i>
-						</p>
-						<span></span>
+						<p>{selectedItem?.value || 'Select an item'}</p>
+						<span
+							style={
+								{
+									'--rotation': isOpen ? '0deg' : '180deg',
+								} as React.CSSProperties
+							}
+						></span>
 					</div>
 					{items.map((item, itemIndex) => (
 						<div

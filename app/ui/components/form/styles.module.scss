@@ -32,6 +32,10 @@ $item-flex: 6;
 			}
 		}
 
+		.combobox {
+			flex: $item-flex;
+		}
+
 		.checkbox-container {
 			--input-focus: #2d8cf0;
 			--input-out-of-focus: #ccc;

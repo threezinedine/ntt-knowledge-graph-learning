@@ -1,18 +1,17 @@
 .new-select {
-	width: 300px;
-	height: 50px;
+	width: 100%;
+	height: var(--combobox-line-height);
 	margin: auto;
 
-	margin-top: 50px;
 	text-align: center;
-	color: #444;
-	line-height: 50px;
+	color: var(--combobox-text-color);
+	line-height: var(--combobox-line-height);
 	position: relative;
 
 	.selection {
 		width: 100%;
 		height: 100%;
-		background-color: #fff;
+		background-color: var(--combobox-background-color);
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 
 		cursor: pointer;
@@ -80,7 +79,12 @@
 			border-color: #bbb transparent transparent transparent;
 
 			position: absolute;
-			top: 18px; /* 50 / 2 - 14 / 2 */
+			transform: rotate(var(--rotation));
+			transition: transform 200ms ease-in-out;
+			-o-transition: -o-transform 200ms ease-in-out;
+			-ms-transition: -ms-transform 200ms ease-in-out;
+			-moz-transition: -moz-transform 200ms ease-in-out;
+			-webkit-transition: -webkit-transform 200ms ease-in-out;
 			right: 22px; /* 60 / 2 - 16 / 2 */
 		}
 	}
@@ -116,11 +120,10 @@
 
 .new-option {
 	text-align: center;
-	background-color: #fff;
+	background-color: var(--combobox-background-color);
 	cursor: pointer;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 	position: relative;
-	margin-top: 1px;
 
 	position: absolute;
 	left: 0;
@@ -138,6 +141,6 @@
 }
 
 .new-option.reveal:hover {
-	background-color: #444;
-	color: #f5f5f5;
+	background-color: var(--combobox-item-hover-color);
+	color: var(--combobox-text-color);
 }

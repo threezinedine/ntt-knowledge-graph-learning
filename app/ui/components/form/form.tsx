@@ -50,7 +50,15 @@ function Form({ items, className }: FormProps) {
 
 				if (inputField.type === 'text') {
 					if (item.choices) {
-						inputTag = <ComboBox selectedItem={null} items={item.choices} onSelect={() => {}} />;
+						inputTag = (
+							<ComboBox
+								selectedItem={null}
+								items={item.choices}
+								onSelect={() => {}}
+								className={clsx(styles['combobox'])}
+								lineHeight={30}
+							/>
+						);
 					} else {
 						inputTag = (
 							<input type="text" id={item.id} placeholder={item.placeholder || 'Enter this field'} />
