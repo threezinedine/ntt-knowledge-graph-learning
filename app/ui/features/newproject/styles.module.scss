@@ -27,6 +27,7 @@ $padding: 1rem;
 		padding: $padding;
 
 		& .button {
+			z-index: 100;
 			padding: 0.6rem;
 			border-radius: 0.5rem;
 		}

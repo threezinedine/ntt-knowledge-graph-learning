@@ -80,6 +80,10 @@ $item-flex: 6;
 				background-color: var(--input-focus);
 			}
 
+			input:not(:checked) ~ .checkbox-checkmark > i {
+				display: none;
+			}
+
 			input:check ~ .checkbox-checkmark::after {
 				display: block;
 			}

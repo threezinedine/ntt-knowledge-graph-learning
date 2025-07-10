@@ -21,11 +21,6 @@ function NewProject() {
 
 	const formItems: FormItem[] = [
 		{
-			id: 'project-name',
-			label: 'Name',
-			className: clsx(styles['form-item']),
-		},
-		{
 			id: 'test-number',
 			label: 'Test Number',
 			type: 'number',
@@ -41,6 +36,19 @@ function NewProject() {
 			id: 'test-boolean',
 			label: 'Test Boolean',
 			type: 'boolean',
+			className: clsx(styles['form-item']),
+		},
+		{
+			id: 'test-password',
+			label: 'Test Password',
+			type: 'password',
+			className: clsx(styles['form-item']),
+		},
+		{
+			id: 'test-choices',
+			label: 'Test Choices',
+			type: 'text',
+			choices: [{ value: 'Choice 1' }, { value: 'Choice 2' }, { value: 'Choice 3' }],
 			className: clsx(styles['form-item']),
 		},
 	];

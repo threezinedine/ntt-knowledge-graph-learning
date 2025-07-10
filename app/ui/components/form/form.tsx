@@ -3,6 +3,7 @@ import * as styles from './styles.module.scss';
 import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import { Validator, FieldType, FormValues } from './validators';
+import { ComboBox, ComboBoxItem } from '../combobox';
 
 export interface FormItem {
 	id: string;
@@ -11,6 +12,7 @@ export interface FormItem {
 	placeholder?: string;
 	validators?: Validator[];
 	type?: FieldType;
+	choices?: ComboBoxItem[];
 }
 
 interface FormProps {
@@ -47,11 +49,23 @@ function Form({ items, className }: FormProps) {
 				let inputTag: React.ReactNode | null = null;
 
 				if (inputField.type === 'text') {
-					inputTag = <input type="text" id={item.id} placeholder={item.placeholder || 'Enter this field'} />;
+					if (item.choices) {
+						inputTag = <ComboBox selectedItem={null} items={item.choices} onSelect={() => {}} />;
+					} else {
+						inputTag = (
+							<input type="text" id={item.id} placeholder={item.placeholder || 'Enter this field'} />
+						);
+					}
 				} else if (inputField.type === 'number') {
 					inputTag = (
 						<input type="number" id={item.id} placeholder={item.placeholder || 'Enter this field'} />
 					);
+				} else if (inputField.type === 'password') {
+					inputTag = (
+						<input type="password" id={item.id} placeholder={item.placeholder || 'Enter this field'} />
+					);
+				} else if (inputField.type === 'date') {
+					inputTag = <input type="date" id={item.id} placeholder={item.placeholder || 'Enter this field'} />;
 				} else if (inputField.type === 'boolean') {
 					inputTag = (
 						<label className={styles['checkbox-container']} htmlFor={item.id}>

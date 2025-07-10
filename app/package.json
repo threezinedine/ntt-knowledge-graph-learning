@@ -4,7 +4,9 @@
 	"main": "dist-loader/index.js",
 	"scripts": {
 		"compile:electron": "tsc --project ./loader/tsconfig.json",
+		"compile:electron:dev": "npm run compile:electron && npm run dev:all",
 		"dev": "npm run compile:ui && npm run compile:electron && set NODE_ENV=development && electron .",
+		"dev:all": "concurrently \"npm run compile:ui:watch\" \"npm run dev\"",
 		"compile:ui": "webpack --config webpack.config.js",
 		"compile:ui:watch": "nodemon --config nodemon.ui.json",
 		"build": "npm run compile:electron && npm run compile:ui && set NODE_ENV=production && electron-builder",
@@ -32,6 +34,7 @@
 		"@wdio/mocha-framework": "^9.16.2",
 		"@wdio/spec-reporter": "^9.16.2",
 		"babel-loader": "^10.0.0",
+		"concurrently": "^9.2.0",
 		"css-loader": "^7.1.2",
 		"electron": "^37.1.0",
 		"electron-builder": "^26.0.12",

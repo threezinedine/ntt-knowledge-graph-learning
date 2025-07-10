@@ -1,9 +1,10 @@
-export type FieldType = 'text' | 'number' | 'boolean' | 'file' | 'email' | 'password' | 'url' | 'date';
+export type FieldType = 'text' | 'number' | 'boolean' | 'file' | 'password' | 'date';
+export type FieldValue = string | number | boolean | File | Date;
 
 export interface Field {
 	name: string;
 	type: FieldType;
-	value: string | number | boolean | File | Date;
+	value: FieldValue;
 }
 
 export type FormValues = {
