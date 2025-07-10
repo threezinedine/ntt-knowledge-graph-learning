@@ -12,8 +12,8 @@ declare global {
 
 			onShouldCreateNewProjectWindow: (callback: () => Promise<void>) => void;
 
-			onCreateNewProjectWindow: () => Promise<void>;
-			onCloseNewProjectWindow: () => Promise<void>;
+			openNewProjectWindow: () => Promise<void>;
+			closeNewProjectWindow: () => Promise<void>;
 
 			loadJsonFile: (filePath: string) => Promise<string | null>;
 			saveJsonFile: (filePath: string, data: string) => Promise<void>;

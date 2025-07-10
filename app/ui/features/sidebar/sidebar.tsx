@@ -93,7 +93,7 @@ export default function Sidebar({ groups }: SidebarProps) {
 	}
 
 	function handleOpenCreateProjectWindow() {
-		window.electron.onCreateNewProjectWindow();
+		window.electron.openNewProjectWindow();
 	}
 
 	return (

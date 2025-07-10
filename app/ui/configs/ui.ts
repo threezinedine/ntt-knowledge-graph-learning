@@ -7,8 +7,13 @@ export default class UIConfig {
 	public CloseButtonHoverColor: string = 'rgb(200, 10, 10)';
 	public LogoColor: string = 'rgb(200, 200, 200)';
 
+	public CreateButtonColor: string = 'rgb(100, 100, 200)';
+	public CreateButtonHoverColor: string = 'rgb(114, 114, 255)';
+
 	public ApplicationBackgroundColor: string = 'rgb(15, 15, 15)';
 	public EditorBackgroundColor: string = 'rgb(24, 24, 24)';
+
+	public SeparatorColor: string = 'rgb(50, 50, 50)';
 
 	private static _instance: UIConfig;
 

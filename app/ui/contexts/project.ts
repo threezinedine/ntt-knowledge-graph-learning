@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 interface Project {
 	projectName: string;
+	projectPath: string;
 }
 
 interface ProjectState {
@@ -16,6 +17,7 @@ const useProject = create<ProjectState>((set) => ({
 	dirty: true,
 	project: {
 		projectName: '',
+		projectPath: '',
 	},
 	makeDirty: () => {
 		set((state) => {

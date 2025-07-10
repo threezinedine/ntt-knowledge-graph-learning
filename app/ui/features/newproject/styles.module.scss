@@ -1,8 +1,33 @@
+$padding: 1rem;
+
 .new-project {
 	background-color: var(--background-color);
 	height: 100%;
+	user-select: none;
+	display: flex;
+	flex-direction: column;
 
 	&-header {
 		-webkit-app-region: drag;
+		padding: $padding;
+		border-bottom: 1px solid var(--separator-color);
+		color: var(--text-color);
+	}
+
+	&-content {
+		flex: 1;
+		padding: $padding;
+	}
+
+	&-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 1rem;
+		padding: $padding;
+
+		& .button {
+			padding: 0.6rem;
+			border-radius: 0.5rem;
+		}
 	}
 }

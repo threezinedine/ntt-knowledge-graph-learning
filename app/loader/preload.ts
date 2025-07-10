@@ -26,8 +26,8 @@ contextBridge.exposeInMainWorld('electron', {
 	onShouldCreateNewProjectWindow: (callback: () => Promise<void>) =>
 		ipcRenderer.on(EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW, callback),
 
-	onCreateNewProjectWindow: () => ipcRenderer.invoke(EVENT_CREATE_NEW_PROJECT_WINDOW),
-	onCloseNewProjectWindow: () => ipcRenderer.invoke(EVENT_CLOSE_NEW_PROJECT_WINDOW),
+	openNewProjectWindow: () => ipcRenderer.invoke(EVENT_CREATE_NEW_PROJECT_WINDOW),
+	closeNewProjectWindow: () => ipcRenderer.invoke(EVENT_CLOSE_NEW_PROJECT_WINDOW),
 
 	loadJsonFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_JSON_FILE, filePath),
 });

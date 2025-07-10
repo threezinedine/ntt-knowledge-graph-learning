@@ -30,6 +30,10 @@ function createNewProjectWindow() {
 		newProjectWindow.webContents.send(EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW);
 	});
 
+	newProjectWindow.on('maximize', () => {
+		newProjectWindow.unmaximize();
+	});
+
 	numberOfNewProjectWindow++;
 }
 
