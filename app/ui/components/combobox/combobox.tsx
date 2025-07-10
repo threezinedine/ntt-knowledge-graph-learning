@@ -83,7 +83,6 @@ function ComboBox({
 		}
 
 		closeSelect();
-		setIsOpen(false);
 
 		const arrowItem = newSelectRef.current?.querySelector(`.${styles['selection']} > span`) as HTMLSpanElement;
 		if (!arrowItem) {
@@ -96,12 +95,12 @@ function ComboBox({
 	}, []);
 
 	function handleToggle() {
-		setIsOpen(!isOpen);
 		if (isOpen) {
-			openSelect();
-		} else {
 			closeSelect();
+		} else {
+			openSelect();
 		}
+		setIsOpen(!isOpen);
 	}
 
 	function handleSelect(item: ComboBoxItem) {
@@ -129,7 +128,7 @@ function ComboBox({
 						<span
 							style={
 								{
-									'--rotation': isOpen ? '0deg' : '180deg',
+									'--rotation': isOpen ? '180deg' : '0deg',
 								} as React.CSSProperties
 							}
 						></span>
