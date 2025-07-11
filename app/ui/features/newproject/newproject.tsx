@@ -1,55 +1,54 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import * as styles from './styles.module.scss';
 import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import { Button } from '@/components';
 import { useProject } from '@/contexts';
-import { Form, FormItem } from '@/components';
+import { Form, FormItem, Required, FormRef, FormValues } from '@/components/form';
 
 const uiConfig = UIConfig.getInstance();
 
 function NewProject() {
 	const project = useProject((state) => state.project);
+	const saveProject = useProject((state) => state.saveProject);
+	const formRef = useRef<FormRef>(null);
 
 	function handleCancel() {
 		window.electron.closeNewProjectWindow();
 	}
 
+	function handleSubmit(values: FormValues) {
+		const projectClone = JSON.parse(JSON.stringify(project));
+		projectClone.projectName = values['project-name'];
+		projectClone.projectPath = values['project-path'];
+		saveProject(projectClone.projectPath, projectClone);
+	}
+
 	function handleCreate() {
-		window.electron.closeNewProjectWindow();
+		if (!formRef.current) {
+			return;
+		}
+
+		if (formRef.current.submit()) {
+			formRef.current.clean();
+			window.electron.closeNewProjectWindow();
+		}
 	}
 
 	const formItems: FormItem[] = [
 		{
-			id: 'test-number',
-			label: 'Test Number',
-			type: 'number',
-			className: clsx(styles['form-item']),
-		},
-		{
-			id: 'test-date',
-			label: 'Test Date',
-			type: 'date',
-			className: clsx(styles['form-item']),
-		},
-		{
-			id: 'test-boolean',
-			label: 'Test Boolean',
-			type: 'boolean',
-			className: clsx(styles['form-item']),
-		},
-		{
-			id: 'test-password',
-			label: 'Test Password',
-			type: 'password',
-			className: clsx(styles['form-item']),
-		},
-		{
-			id: 'test-choices',
-			label: 'Test Choices',
+			id: 'project-name',
+			label: 'Project',
 			type: 'text',
-			choices: [{ value: 'Choice 1' }, { value: 'Choice 2' }, { value: 'Choice 3' }],
 			className: clsx(styles['form-item']),
+			validators: [Required],
+		},
+		{
+			id: 'project-path',
+			label: 'Path',
+			type: 'file',
+			className: clsx(styles['form-item']),
+			validators: [Required],
 		},
 	];
 
@@ -68,7 +67,7 @@ function NewProject() {
 				<h1>New Project - {project.projectName || 'Untitled'}</h1>
 			</div>
 			<div className={clsx(styles['new-project-content'])}>
-				<Form items={formItems} />
+				<Form items={formItems} ref={formRef} onSubmit={handleSubmit} />
 			</div>
 			<div className={clsx(styles['new-project-footer'])}>
 				<Button

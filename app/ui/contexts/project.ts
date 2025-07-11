@@ -41,7 +41,8 @@ const useProject = create<ProjectState>((set) => ({
 		await window.electron.saveJsonFile(filePath, jsonContent);
 		set((state) => {
 			const newState = JSON.parse(JSON.stringify(state));
-			newState.dirty = true;
+			newState.dirty = false;
+			newState.project = project;
 			return newState;
 		});
 	},

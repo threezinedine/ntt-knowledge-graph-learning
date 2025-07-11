@@ -12,23 +12,33 @@ $item-flex: 6;
 			text-overflow: ellipsis;
 		}
 
-		input {
+		.input-container {
 			flex: $item-flex;
-			outline: none;
-			padding: 0.3rem;
-			background-color: var(--background-color);
-			border: none;
-			border-bottom: 2px solid var(--separator-color);
-			color: var(--text-color);
-			justify-self: start;
 
-			&::placeholder {
-				font-style: italic;
+			input {
+				outline: none;
+				padding: 0.3rem;
+				background-color: var(--background-color);
+				border: none;
+				border-bottom: 2px solid var(--separator-color);
+				color: var(--text-color);
+				justify-self: start;
+
+				&::placeholder {
+					font-style: italic;
+				}
+
+				&:active,
+				&:focus {
+					outline: none;
+				}
 			}
 
-			&:active,
-			&:focus {
-				outline: none;
+			.error-message {
+				color: var(--error-message-color);
+				font-size: 0.8rem;
+				font-style: italic;
+				margin-top: 0.2rem;
 			}
 		}
 

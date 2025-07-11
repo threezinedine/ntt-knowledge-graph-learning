@@ -1,5 +1,11 @@
-import { Validator } from './validator';
+import { Field, Validator } from './validator';
 
-export const Required: Validator = (value: string) => {
-	return value.length === 0 ? 'This field is required' : null;
+export const Required: Validator = (value: Field) => {
+	if (value.type === 'text' || value.type === 'password') {
+		return (value.value as string).length === 0 ? 'This field is required' : null;
+	} else if (value.type === 'file') {
+		return (value.value as File).size === 0 ? 'This field is required' : null;
+	}
+
+	return null;
 };
