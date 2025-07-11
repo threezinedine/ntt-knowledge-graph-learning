@@ -5,6 +5,13 @@ import { UIConfig } from '@/configs';
 import { Validator, FieldType, FormValues } from './validators';
 import { ComboBox, ComboBoxItem } from '../combobox';
 import { TextInput } from '../textinput';
+import Button from '../button';
+
+interface FileOptions {
+	extensions?: string[]; // `folder` must be `false` or have no meanings
+	folder?: boolean; // if `true` then choose folder else file
+	folderPath?: string; // default folder path
+}
 
 export interface FormItem {
 	id: string;
@@ -13,7 +20,8 @@ export interface FormItem {
 	placeholder?: string;
 	validators?: Validator[];
 	type?: FieldType;
-	choices?: ComboBoxItem[];
+	choices?: ComboBoxItem[]; // for combobox input (text) only
+	fileOptions?: FileOptions; // for file input only
 }
 
 interface FormProps {
@@ -93,30 +101,42 @@ const Form = forwardRef<FormRef, FormProps>(
 			return errors;
 		});
 
+		function validateField(id: string, reload: boolean = false): FormError {
+			const value = formValues[id];
+			const item = items.find((item) => item.id === id);
+			let newError: FormError | null = null;
+
+			item.validators?.forEach((validator: Validator) => {
+				const error = validator(value, formValues);
+				if (error) {
+					newError = error;
+				}
+			});
+
+			if (reload) {
+				const newErrors = [...errors];
+				newErrors[items.findIndex((item) => item.id === id)] = newError;
+				setErrors(newErrors);
+			}
+
+			return newError;
+		}
+
 		function validateForm(): FormError[] {
 			const newErrors = [...errors];
 
 			items.forEach((item, index) => {
-				const value = formValues[item.id];
-
-				item.validators?.forEach((validator: Validator) => {
-					const error = validator(value, formValues);
-					if (error) {
-						newErrors[index] = error;
-						return;
-					}
-					newErrors[index] = null;
-				});
+				newErrors[index] = validateField(item.id);
 			});
 
 			return newErrors;
 		}
 
 		function onTextInputChange(id: string, value: string) {
-			const newFormValues = { ...formValues };
+			const newFormValues = JSON.parse(JSON.stringify(formValues));
 			newFormValues[id].value = value;
+			validateField(id, true);
 			setFormValues(newFormValues);
-			setErrors(validateForm());
 		}
 
 		return (
@@ -148,10 +168,11 @@ const Form = forwardRef<FormRef, FormProps>(
 							inputTag = (
 								<TextInput
 									type="text"
+									value={inputField.value as string}
 									placeholder={item.placeholder || 'Enter this field'}
 									className={clsx(styles['text-input'])}
 									onChange={(value) => onTextInputChange(item.id, value)}
-									onBlur={() => validateForm()}
+									onBlur={() => validateField(item.id, true)}
 								/>
 							);
 						}
@@ -159,6 +180,7 @@ const Form = forwardRef<FormRef, FormProps>(
 						inputTag = (
 							<TextInput
 								type="number"
+								value={inputField.value as number}
 								placeholder={item.placeholder || 'Enter this field'}
 								className={clsx(styles['text-input'])}
 								onChange={(value) => onTextInputChange(item.id, value)}
@@ -168,6 +190,7 @@ const Form = forwardRef<FormRef, FormProps>(
 						inputTag = (
 							<TextInput
 								type="password"
+								value={inputField.value as string}
 								placeholder={item.placeholder || 'Enter this field'}
 								className={clsx(styles['text-input'])}
 								onChange={(value) => onTextInputChange(item.id, value)}
@@ -189,6 +212,40 @@ const Form = forwardRef<FormRef, FormProps>(
 									<i className={clsx('fa-solid fa-check')}></i>
 								</div>
 							</label>
+						);
+					} else if (inputField.type === 'file') {
+						inputTag = (
+							<div className={styles['file-input-container']}>
+								<TextInput
+									type="text"
+									readOnly={true}
+									placeholder={item.placeholder || 'Enter this field'}
+									onChange={(value) => onTextInputChange(item.id, value)}
+									onBlur={() => validateForm()}
+									value={inputField.value as string}
+									className={styles['file-input-text']}
+								/>
+								<Button
+									onClick={async () => {
+										const result = await window.electron.openFolderDialog({
+											folder: item.fileOptions?.folder || false,
+											extensions: item.fileOptions?.extensions || [],
+											folderPath: item.fileOptions?.folderPath || '.',
+										});
+
+										if (!result.canceled) {
+											console.log(result.filePaths);
+											onTextInputChange(item.id, result.filePaths[0]);
+										}
+									}}
+									className={styles['file-input-button']}
+									buttonColor={uiConfig.EditorBackgroundColor}
+									textColor={uiConfig.TextColor}
+									buttonColorHover={uiConfig.NormalButtonHoverColor}
+								>
+									<i className={clsx('fa-solid fa-folder-open')}></i>
+								</Button>
+							</div>
 						);
 					}
 

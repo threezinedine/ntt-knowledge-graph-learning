@@ -16,7 +16,6 @@ function createNewProjectWindow() {
 		autoHideMenuBar: true,
 		resizable: false,
 		frame: false,
-		alwaysOnTop: true,
 		parent: BrowserWindow.getFocusedWindow(),
 		webPreferences: {
 			nodeIntegration: true,

@@ -50,6 +50,12 @@ function NewProject() {
 			className: clsx(styles['form-item']),
 			validators: [Required],
 		},
+		{
+			id: 'test-number',
+			label: 'Test Number',
+			type: 'number',
+			className: clsx(styles['form-item']),
+		},
 	];
 
 	return (

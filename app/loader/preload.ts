@@ -11,7 +11,9 @@ import {
 	EVENT_WINDOW_IS_UNMAXIMIZED,
 	EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_CLOSE_NEW_PROJECT_WINDOW,
+	EVENT_OPEN_FOLDER_DIALOG,
 } from './events';
+import { RenderDialogOptions } from './dialog';
 
 contextBridge.exposeInMainWorld('electron', {
 	isWindowMaximized: () => ipcRenderer.invoke(EVENT_IS_WINDOW_MAXIMIZED),
@@ -30,4 +32,6 @@ contextBridge.exposeInMainWorld('electron', {
 	closeNewProjectWindow: () => ipcRenderer.invoke(EVENT_CLOSE_NEW_PROJECT_WINDOW),
 
 	loadJsonFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_JSON_FILE, filePath),
+
+	openFolderDialog: (options: RenderDialogOptions) => ipcRenderer.invoke(EVENT_OPEN_FOLDER_DIALOG, options),
 });

@@ -1,4 +1,9 @@
 declare global {
+	interface DialogResult {
+		canceled: boolean;
+		filePaths: string[];
+	}
+
 	interface Window {
 		electron: {
 			isWindowMaximized: () => Promise<boolean>;
@@ -17,6 +22,8 @@ declare global {
 
 			loadJsonFile: (filePath: string) => Promise<string | null>;
 			saveJsonFile: (filePath: string, data: string) => Promise<void>;
+
+			openFolderDialog: (options: RenderDialogOptions) => Promise<DialogResult>;
 		};
 	}
 }

@@ -9,10 +9,12 @@ import {
 	EVENT_LOAD_JSON_FILE,
 	EVENT_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_CLOSE_NEW_PROJECT_WINDOW,
+	EVENT_OPEN_FOLDER_DIALOG,
 } from './events';
 import { createNewProjectWindow, closeNewProjectWindow } from './projectwindow';
+import { openDialog, RenderDialogOptions } from './dialog';
 
-export default function registerAllHandlers(mainWindow: BrowserWindow) {
+export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_IS_WINDOW_MAXIMIZED, () => mainWindow.isMaximized());
 	ipcMain.handle(EVENT_CLOSE_WINDOW, () => mainWindow.close());
 	ipcMain.handle(EVENT_MINIMIZE_WINDOW, () => mainWindow.minimize());
@@ -31,4 +33,6 @@ export default function registerAllHandlers(mainWindow: BrowserWindow) {
 
 	ipcMain.handle(EVENT_CREATE_NEW_PROJECT_WINDOW, createNewProjectWindow);
 	ipcMain.handle(EVENT_CLOSE_NEW_PROJECT_WINDOW, closeNewProjectWindow);
+
+	ipcMain.handle(EVENT_OPEN_FOLDER_DIALOG, (_, options: RenderDialogOptions) => openDialog(mainWindow, options));
 }

@@ -1,6 +1,6 @@
 import path from 'path';
 import { app, BrowserWindow } from 'electron';
-import registerAllHandlers from './ipcHandlers';
+import { registerMainWindowHandlers } from './ipcHandlers';
 import { EVENT_WINDOW_IS_MAXIMIZED, EVENT_WINDOW_IS_UNMAXIMIZED } from './events';
 
 function createWindow() {
@@ -30,7 +30,7 @@ function createWindow() {
 
 	mainWindow.loadFile('index.html');
 
-	registerAllHandlers(mainWindow);
+	registerMainWindowHandlers(mainWindow);
 
 	mainWindow.on('maximize', () => {
 		mainWindow.webContents.send(EVENT_WINDOW_IS_MAXIMIZED);

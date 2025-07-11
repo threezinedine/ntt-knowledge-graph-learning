@@ -3,6 +3,8 @@ import * as styles from './styles.module.scss';
 import clsx from 'clsx';
 
 interface TextInputProps {
+	value?: string | number;
+	readOnly?: boolean;
 	type: 'text' | 'password' | 'number' | 'date';
 	placeholder?: string;
 	className?: string;
@@ -14,6 +16,8 @@ interface TextInputProps {
 }
 
 export default function TextInput({
+	value,
+	readOnly = false,
 	placeholder,
 	type,
 	className,
@@ -34,7 +38,14 @@ export default function TextInput({
 				} as React.CSSProperties
 			}
 		>
-			<input type={type} placeholder={placeholder} onChange={(e) => onChange?.(e.target.value)} onBlur={onBlur} />
+			<input
+				type={type}
+				placeholder={placeholder}
+				onChange={(e) => onChange?.(e.target.value)}
+				onBlur={onBlur}
+				readOnly={readOnly}
+				value={value || ''}
+			/>
 			<span></span>
 		</div>
 	);
