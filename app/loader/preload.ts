@@ -14,6 +14,8 @@ import {
 	EVENT_OPEN_FOLDER_DIALOG,
 	EVENT_CHECK_FILE_EXISTS,
 	EVENT_PATH_JOIN,
+	EVENT_CHECK_DIR_EXIST,
+	EVENT_CREATE_DIR,
 } from './events';
 import { RenderDialogOptions } from './dialog';
 
@@ -38,5 +40,9 @@ contextBridge.exposeInMainWorld('electron', {
 	openFolderDialog: (options: RenderDialogOptions) => ipcRenderer.invoke(EVENT_OPEN_FOLDER_DIALOG, options),
 
 	checkFileExists: (filePath: string) => ipcRenderer.invoke(EVENT_CHECK_FILE_EXISTS, filePath),
+	checkDirExist: (dirPath: string) => ipcRenderer.invoke(EVENT_CHECK_DIR_EXIST, dirPath),
+
+	createDir: (dirPath: string) => ipcRenderer.invoke(EVENT_CREATE_DIR, dirPath),
+
 	pathJoin: (paths: string[]) => ipcRenderer.invoke(EVENT_PATH_JOIN, paths),
 });

@@ -19,6 +19,7 @@ export interface FormItem {
 	className?: string;
 	placeholder?: string;
 	validators?: Validator[];
+	impacts?: string[]; // if the field is changed, the form will be validated
 	type?: FieldType;
 	choices?: ComboBoxItem[]; // for combobox input (text) only
 	fileOptions?: FileOptions; // for file input only
@@ -89,6 +90,7 @@ const Form = forwardRef<FormRef, FormProps>(
 					name: item.id,
 					type: item.type || 'text',
 					value: '',
+					hasBeenChanged: false,
 				};
 			});
 			return values;
@@ -105,15 +107,29 @@ const Form = forwardRef<FormRef, FormProps>(
 			id: string,
 			reload: boolean = false,
 			newValues: FormValues | null = null,
+			validatedFields: string[] = [], // used for checking circular dependencies
 		): Promise<FormError> {
 			const value = newValues ? newValues[id] : formValues[id];
 			const item = items.find((item) => item.id === id);
 			let newError: FormError | null = null;
 
+			if (validatedFields.includes(id)) {
+				console.error('Circular dependency detected');
+				return null;
+			}
+
 			for (const validator of item.validators || []) {
 				const error = await validator(value, newValues || formValues);
 				if (error) {
 					newError = error;
+				}
+			}
+
+			validatedFields.push(id);
+
+			for (const impact of item.impacts || []) {
+				if (newValues?.[impact]?.hasBeenChanged) {
+					await validateField(impact, true, newValues, validatedFields);
 				}
 			}
 
@@ -129,8 +145,9 @@ const Form = forwardRef<FormRef, FormProps>(
 		async function validateForm(): Promise<FormError[]> {
 			const newErrors = [...errors];
 
-			for (const item of items) {
-				newErrors[items.findIndex((item) => item.id === item.id)] = await validateField(item.id);
+			for (let i = 0; i < items.length; i++) {
+				const item = items[i];
+				newErrors[i] = await validateField(item.id);
 			}
 
 			return newErrors;
@@ -139,6 +156,7 @@ const Form = forwardRef<FormRef, FormProps>(
 		async function onTextInputChange(id: string, value: string) {
 			const newFormValues = JSON.parse(JSON.stringify(formValues));
 			newFormValues[id].value = value;
+			newFormValues[id].hasBeenChanged = true;
 			await validateField(id, true, newFormValues);
 			setFormValues(newFormValues);
 		}
@@ -217,7 +235,7 @@ const Form = forwardRef<FormRef, FormProps>(
 								</div>
 							</label>
 						);
-					} else if (inputField.type === 'file') {
+					} else if (inputField.type === 'file' || inputField.type === 'folder') {
 						inputTag = (
 							<div className={styles['file-input-container']}>
 								<TextInput
@@ -238,7 +256,6 @@ const Form = forwardRef<FormRef, FormProps>(
 										});
 
 										if (!result.canceled) {
-											console.log(result.filePaths);
 											onTextInputChange(item.id, result.filePaths[0]);
 										}
 									}}

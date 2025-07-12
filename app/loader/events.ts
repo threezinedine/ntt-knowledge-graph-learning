@@ -17,4 +17,8 @@ export const EVENT_CLOSE_NEW_PROJECT_WINDOW = 'close-new-project-window';
 export const EVENT_OPEN_FOLDER_DIALOG = 'open-folder-dialog';
 
 export const EVENT_CHECK_FILE_EXISTS = 'check-file-exists';
+export const EVENT_CHECK_DIR_EXIST = 'check-dir-exist';
+
+export const EVENT_CREATE_DIR = 'create-dir';
+
 export const EVENT_PATH_JOIN = 'path-join';

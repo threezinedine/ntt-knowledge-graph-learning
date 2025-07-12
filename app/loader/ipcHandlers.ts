@@ -12,6 +12,8 @@ import {
 	EVENT_OPEN_FOLDER_DIALOG,
 	EVENT_CHECK_FILE_EXISTS,
 	EVENT_PATH_JOIN,
+	EVENT_CHECK_DIR_EXIST,
+	EVENT_CREATE_DIR,
 } from './events';
 import { createNewProjectWindow, closeNewProjectWindow } from './projectwindow';
 import { openDialog, RenderDialogOptions } from './dialog';
@@ -42,6 +44,20 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_CHECK_FILE_EXISTS, (_, filePath: string): Promise<boolean> => {
 		return Promise.resolve(fs.existsSync(filePath));
 	});
+
+	ipcMain.handle(EVENT_CHECK_DIR_EXIST, (_, dirPath: string): Promise<boolean> => {
+		try {
+			return Promise.resolve(fs.statSync(dirPath).isDirectory());
+		} catch (error) {
+			return Promise.resolve(false);
+		}
+	});
+
+	ipcMain.handle(EVENT_CREATE_DIR, (_, dirPath: string): Promise<void> => {
+		fs.mkdirSync(dirPath, { recursive: true });
+		return Promise.resolve();
+	});
+
 	ipcMain.handle(EVENT_PATH_JOIN, (_, paths: string[]): Promise<string> => {
 		return Promise.resolve(path.join(...paths));
 	});

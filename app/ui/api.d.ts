@@ -26,6 +26,10 @@ declare global {
 			openFolderDialog: (options: RenderDialogOptions) => Promise<DialogResult>;
 
 			checkFileExists: (filePath: string) => Promise<boolean>;
+			checkDirExist: (dirPath: string) => Promise<boolean>;
+
+			createDir: (dirPath: string) => Promise<void>;
+
 			pathJoin: (paths: string[]) => Promise<string>;
 		};
 	}

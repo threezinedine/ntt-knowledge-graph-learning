@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import { Button } from '@/components';
 import { useProject } from '@/contexts';
-import { Form, FormItem, Required, FormRef, FormValues, HasNoFile } from '@/components/form';
+import { Form, FormItem, Required, FormRef, FormValues, ProjectFileValidate } from '@/components/form';
 
 const uiConfig = UIConfig.getInstance();
 
@@ -24,14 +24,14 @@ function NewProject() {
 		saveProject(projectClone.projectPath, projectClone);
 	}
 
-	function handleCreate() {
+	async function handleCreate() {
 		if (!formRef.current) {
 			return;
 		}
 
-		if (formRef.current.submit()) {
-			formRef.current.clean();
-			window.electron.closeNewProjectWindow();
+		if (await formRef.current.submit()) {
+			await formRef.current.clean();
+			await window.electron.closeNewProjectWindow();
 		}
 	}
 
@@ -42,13 +42,14 @@ function NewProject() {
 			type: 'text',
 			className: clsx(styles['form-item']),
 			validators: [Required],
+			impacts: ['project-path'],
 		},
 		{
 			id: 'project-path',
 			label: 'Path',
-			type: 'file',
+			type: 'folder',
 			className: clsx(styles['form-item']),
-			validators: [Required, HasNoFile('project.nttproj')],
+			validators: [Required, ProjectFileValidate('project-name', 'project.nttproj')],
 		},
 	];
 
