@@ -5,7 +5,6 @@ import {
 	EVENT_MINIMIZE_WINDOW,
 	EVENT_MAXIMIZE_WINDOW,
 	EVENT_RESTORE_WINDOW,
-	EVENT_LOAD_JSON_FILE,
 	EVENT_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_WINDOW_IS_MAXIMIZED,
 	EVENT_WINDOW_IS_UNMAXIMIZED,
@@ -16,6 +15,8 @@ import {
 	EVENT_PATH_JOIN,
 	EVENT_CHECK_DIR_EXIST,
 	EVENT_CREATE_DIR,
+	EVENT_LOAD_FILE,
+	EVENT_SAVE_FILE,
 } from './events';
 import { RenderDialogOptions } from './dialog';
 
@@ -35,7 +36,8 @@ contextBridge.exposeInMainWorld('electron', {
 	openNewProjectWindow: () => ipcRenderer.invoke(EVENT_CREATE_NEW_PROJECT_WINDOW),
 	closeNewProjectWindow: () => ipcRenderer.invoke(EVENT_CLOSE_NEW_PROJECT_WINDOW),
 
-	loadJsonFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_JSON_FILE, filePath),
+	loadFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_FILE, filePath),
+	saveFile: (filePath: string, data: string) => ipcRenderer.invoke(EVENT_SAVE_FILE, filePath, data),
 
 	openFolderDialog: (options: RenderDialogOptions) => ipcRenderer.invoke(EVENT_OPEN_FOLDER_DIALOG, options),
 

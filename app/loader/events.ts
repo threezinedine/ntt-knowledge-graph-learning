@@ -7,7 +7,8 @@ export const EVENT_RESTORE_WINDOW = 'restore-window';
 export const EVENT_WINDOW_IS_MAXIMIZED = 'window-is-maximized';
 export const EVENT_WINDOW_IS_UNMAXIMIZED = 'window-is-unmaximized';
 
-export const EVENT_LOAD_JSON_FILE = 'load-json-file';
+export const EVENT_LOAD_FILE = 'load-file';
+export const EVENT_SAVE_FILE = 'save-file';
 
 export const EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW = 'should-create-new-project-window';
 

@@ -6,7 +6,8 @@ import {
 	EVENT_MINIMIZE_WINDOW,
 	EVENT_MAXIMIZE_WINDOW,
 	EVENT_RESTORE_WINDOW,
-	EVENT_LOAD_JSON_FILE,
+	EVENT_LOAD_FILE,
+	EVENT_SAVE_FILE,
 	EVENT_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_CLOSE_NEW_PROJECT_WINDOW,
 	EVENT_OPEN_FOLDER_DIALOG,
@@ -26,7 +27,7 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_MAXIMIZE_WINDOW, () => mainWindow.maximize());
 	ipcMain.handle(EVENT_RESTORE_WINDOW, () => mainWindow.unmaximize());
 
-	ipcMain.handle(EVENT_LOAD_JSON_FILE, (event, filePath: string): Promise<string | null> => {
+	ipcMain.handle(EVENT_LOAD_FILE, (event, filePath: string): Promise<string | null> => {
 		try {
 			const fileContent = fs.readFileSync(filePath, 'utf8');
 			return Promise.resolve(fileContent);
@@ -34,6 +35,11 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 			console.error(error);
 			return Promise.resolve(null);
 		}
+	});
+
+	ipcMain.handle(EVENT_SAVE_FILE, (event, filePath: string, data: string): Promise<void> => {
+		fs.writeFileSync(filePath, data);
+		return Promise.resolve();
 	});
 
 	ipcMain.handle(EVENT_CREATE_NEW_PROJECT_WINDOW, createNewProjectWindow);

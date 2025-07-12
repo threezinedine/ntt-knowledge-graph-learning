@@ -1,8 +1,9 @@
 import { create } from 'zustand';
+import { PROJECT_FILE_NAME } from '@/data';
 
 interface Project {
 	projectName: string;
-	projectPath: string;
+	projectDir: string;
 }
 
 interface ProjectState {
@@ -10,14 +11,14 @@ interface ProjectState {
 	project: Project;
 	makeDirty: () => void;
 	loadProject: (filePath: string) => void;
-	saveProject: (filePath: string, project: Project) => void;
+	saveProject: (project: Project) => void;
 }
 
 const useProject = create<ProjectState>((set) => ({
 	dirty: true,
 	project: {
 		projectName: '',
-		projectPath: '',
+		projectDir: '',
 	},
 	makeDirty: () => {
 		set((state) => {
@@ -28,7 +29,7 @@ const useProject = create<ProjectState>((set) => ({
 		});
 	},
 	loadProject: async (filePath: string) => {
-		const jsonContent = await window.electron.loadJsonFile(filePath);
+		const jsonContent = await window.electron.loadFile(filePath);
 		set((state) => {
 			const project = JSON.parse(jsonContent);
 			const newState = JSON.parse(JSON.stringify(state));
@@ -36,9 +37,19 @@ const useProject = create<ProjectState>((set) => ({
 			return newState;
 		});
 	},
-	saveProject: async (filePath: string, project: Project) => {
+	saveProject: async (project: Project) => {
 		const jsonContent = JSON.stringify(project);
-		await window.electron.saveJsonFile(filePath, jsonContent);
+
+		const projectDir = project.projectDir;
+
+		if (!(await window.electron.checkDirExist(projectDir))) {
+			await window.electron.createDir(projectDir);
+		}
+
+		const projectFilePath = await window.electron.pathJoin([projectDir, PROJECT_FILE_NAME]);
+
+		await window.electron.saveFile(projectFilePath, jsonContent);
+
 		set((state) => {
 			const newState = JSON.parse(JSON.stringify(state));
 			newState.dirty = false;

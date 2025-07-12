@@ -29,7 +29,7 @@ interface FormProps {
 	items: FormItem[];
 	className?: string;
 	errorMessageColor?: string;
-	onSubmit?: (values: FormValues) => void;
+	onSubmit?: (values: FormValues) => Promise<void>;
 }
 
 type FormError = string | null;
@@ -47,7 +47,7 @@ const Form = forwardRef<FormRef, FormProps>(
 			submit: async () => {
 				const newErrors = await validateForm();
 				if (newErrors.every((error) => error === null)) {
-					onSubmit?.(formValues);
+					await onSubmit?.(formValues);
 					setErrors(newErrors);
 					return true;
 				} else {
@@ -106,12 +106,15 @@ const Form = forwardRef<FormRef, FormProps>(
 		async function validateField(
 			id: string,
 			reload: boolean = false,
-			newValues: FormValues | null = null,
 			validatedFields: string[] = [], // used for checking circular dependencies
-		): Promise<FormError> {
+			newValues: FormValues | null = null,
+			newErrors: FormError[] | null = null,
+		): Promise<FormError[]> {
 			const value = newValues ? newValues[id] : formValues[id];
-			const item = items.find((item) => item.id === id);
-			let newError: FormError | null = null;
+			const itemIndex = items.findIndex((item) => item.id === id);
+			const item = items[itemIndex];
+			let modifiedErrors = newErrors ? [...newErrors] : [...errors];
+			modifiedErrors[itemIndex] = null;
 
 			if (validatedFields.includes(id)) {
 				console.error('Circular dependency detected');
@@ -121,7 +124,7 @@ const Form = forwardRef<FormRef, FormProps>(
 			for (const validator of item.validators || []) {
 				const error = await validator(value, newValues || formValues);
 				if (error) {
-					newError = error;
+					modifiedErrors[itemIndex] = error;
 				}
 			}
 
@@ -129,25 +132,23 @@ const Form = forwardRef<FormRef, FormProps>(
 
 			for (const impact of item.impacts || []) {
 				if (newValues?.[impact]?.hasBeenChanged) {
-					await validateField(impact, true, newValues, validatedFields);
+					modifiedErrors = await validateField(impact, true, validatedFields, newValues, modifiedErrors);
 				}
 			}
 
 			if (reload) {
-				const newErrors = [...errors];
-				newErrors[items.findIndex((item) => item.id === id)] = newError;
-				setErrors(newErrors);
+				setErrors(modifiedErrors);
 			}
 
-			return newError;
+			return modifiedErrors;
 		}
 
 		async function validateForm(): Promise<FormError[]> {
-			const newErrors = [...errors];
+			let newErrors = [...errors];
 
 			for (let i = 0; i < items.length; i++) {
 				const item = items[i];
-				newErrors[i] = await validateField(item.id);
+				newErrors = await validateField(item.id, false, [], null, newErrors);
 			}
 
 			return newErrors;
@@ -157,7 +158,7 @@ const Form = forwardRef<FormRef, FormProps>(
 			const newFormValues = JSON.parse(JSON.stringify(formValues));
 			newFormValues[id].value = value;
 			newFormValues[id].hasBeenChanged = true;
-			await validateField(id, true, newFormValues);
+			await validateField(id, true, [], newFormValues);
 			setFormValues(newFormValues);
 		}
 
@@ -230,7 +231,7 @@ const Form = forwardRef<FormRef, FormProps>(
 						inputTag = (
 							<label className={styles['checkbox-container']} htmlFor={item.id}>
 								<input type="checkbox" id={item.id} />
-								<div className={styles['checkbox-checkmark']}>
+								<div className={clsx(styles['checkbox-checkmark'])}>
 									<i className={clsx('fa-solid fa-check')}></i>
 								</div>
 							</label>

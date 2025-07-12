@@ -20,8 +20,8 @@ declare global {
 			openNewProjectWindow: () => Promise<void>;
 			closeNewProjectWindow: () => Promise<void>;
 
-			loadJsonFile: (filePath: string) => Promise<string | null>;
-			saveJsonFile: (filePath: string, data: string) => Promise<void>;
+			loadFile: (filePath: string) => Promise<string | null>;
+			saveFile: (filePath: string, data: string) => Promise<void>;
 
 			openFolderDialog: (options: RenderDialogOptions) => Promise<DialogResult>;
 

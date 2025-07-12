@@ -3,8 +3,9 @@ import * as styles from './styles.module.scss';
 import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import { Button } from '@/components';
-import { useProject } from '@/contexts';
+import { Project, useProject } from '@/contexts';
 import { Form, FormItem, Required, FormRef, FormValues, ProjectFileValidate } from '@/components/form';
+import { PROJECT_FILE_NAME } from '@/data';
 
 const uiConfig = UIConfig.getInstance();
 
@@ -17,11 +18,15 @@ function NewProject() {
 		window.electron.closeNewProjectWindow();
 	}
 
-	function handleSubmit(values: FormValues) {
-		const projectClone = JSON.parse(JSON.stringify(project));
-		projectClone.projectName = values['project-name'];
-		projectClone.projectPath = values['project-path'];
-		saveProject(projectClone.projectPath, projectClone);
+	async function handleSubmit(values: FormValues) {
+		const projectClone: Project = JSON.parse(JSON.stringify(project));
+		const projectDir = await window.electron.pathJoin([
+			values['project-path'].value as string,
+			values['project-name'].value as string,
+		]);
+		projectClone.projectName = values['project-name'].value as string;
+		projectClone.projectDir = projectDir;
+		await saveProject(projectClone);
 	}
 
 	async function handleCreate() {
@@ -49,7 +54,7 @@ function NewProject() {
 			label: 'Path',
 			type: 'folder',
 			className: clsx(styles['form-item']),
-			validators: [Required, ProjectFileValidate('project-name', 'project.nttproj')],
+			validators: [Required, ProjectFileValidate('project-name', PROJECT_FILE_NAME)],
 		},
 	];
 
