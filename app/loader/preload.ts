@@ -17,6 +17,8 @@ import {
 	EVENT_CREATE_DIR,
 	EVENT_LOAD_FILE,
 	EVENT_SAVE_FILE,
+	EVENT_SAVE_APP_DATA,
+	EVENT_LOAD_APP_DATA,
 } from './events';
 import { RenderDialogOptions } from './dialog';
 
@@ -38,6 +40,9 @@ contextBridge.exposeInMainWorld('electron', {
 
 	loadFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_FILE, filePath),
 	saveFile: (filePath: string, data: string) => ipcRenderer.invoke(EVENT_SAVE_FILE, filePath, data),
+
+	saveAppData: (data: string) => ipcRenderer.invoke(EVENT_SAVE_APP_DATA, data),
+	loadAppData: () => ipcRenderer.invoke(EVENT_LOAD_APP_DATA),
 
 	openFolderDialog: (options: RenderDialogOptions) => ipcRenderer.invoke(EVENT_OPEN_FOLDER_DIALOG, options),
 

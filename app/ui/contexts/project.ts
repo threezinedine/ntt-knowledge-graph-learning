@@ -10,8 +10,8 @@ interface ProjectState {
 	dirty: boolean;
 	project: Project;
 	makeDirty: () => void;
-	loadProject: (filePath: string) => void;
-	saveProject: (project: Project) => void;
+	loadProject: (filePath: string) => Promise<void>;
+	saveProject: (project: Project) => Promise<void>;
 }
 
 const useProject = create<ProjectState>((set) => ({
@@ -31,9 +31,11 @@ const useProject = create<ProjectState>((set) => ({
 	loadProject: async (filePath: string) => {
 		const jsonContent = await window.electron.loadFile(filePath);
 		set((state) => {
-			const project = JSON.parse(jsonContent);
+			const project: Project = JSON.parse(jsonContent);
 			const newState = JSON.parse(JSON.stringify(state));
-			newState.project = project;
+			if (project) {
+				newState.project = project;
+			}
 			return newState;
 		});
 	},

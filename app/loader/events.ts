@@ -10,6 +10,9 @@ export const EVENT_WINDOW_IS_UNMAXIMIZED = 'window-is-unmaximized';
 export const EVENT_LOAD_FILE = 'load-file';
 export const EVENT_SAVE_FILE = 'save-file';
 
+export const EVENT_SAVE_APP_DATA = 'save-app-data';
+export const EVENT_LOAD_APP_DATA = 'load-app-data';
+
 export const EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW = 'should-create-new-project-window';
 
 export const EVENT_CREATE_NEW_PROJECT_WINDOW = 'create-new-project-window';

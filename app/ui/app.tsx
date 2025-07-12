@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MainLayout, Title, Sidebar, FileTree, Community, ContentSystem, TabItem } from '@/features';
 import { useNavigate } from 'react-router';
+import { AppDataConfig } from '@/configs';
+import { useProject } from '@/contexts';
 
 function Application(): React.ReactElement {
 	const [activeTab, setActiveTab] = useState<string>('Tab 1');
@@ -10,12 +12,22 @@ function Application(): React.ReactElement {
 		{ name: 'Super Long Tab Name' },
 	]);
 	const navigate = useNavigate();
+	const loadProject = useProject((state) => state.loadProject);
 
 	useEffect(() => {
-		window.electron.onShouldCreateNewProjectWindow(async () => {
-			navigate('/new-project');
-			return Promise.resolve();
-		});
+		(async () => {
+			window.electron.onShouldCreateNewProjectWindow(async () => {
+				navigate('/new-project');
+				return Promise.resolve();
+			});
+
+			const appDataConfig = await AppDataConfig.getInstance();
+
+			const lastProjectPath = appDataConfig.getLastProjectPath();
+			if (lastProjectPath) {
+				await loadProject(lastProjectPath);
+			}
+		})();
 	}, []);
 
 	return (

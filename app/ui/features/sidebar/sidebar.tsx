@@ -45,6 +45,10 @@ export default function Sidebar({ groups }: SidebarProps) {
 		});
 	}, []);
 
+	useEffect(() => {
+		console.log('project', project);
+	}, [project]);
+
 	function handleToggleGroup(e: React.MouseEvent<HTMLDivElement>, sideGroupIndex: number) {
 		sidebarGroupInfo.toggleGroup(sideGroupIndex);
 		modify();
@@ -156,7 +160,7 @@ export default function Sidebar({ groups }: SidebarProps) {
 				onClick={handleOpenCreateProjectWindow}
 			>
 				<div className={styles['sidebar-project-info__name']}>
-					{project.projectName || 'Untitled'}
+					{project?.projectName || 'Untitled'}
 					{dirty && <span>*</span>}
 				</div>
 				<div className={styles['sidebar-project-info__actions']}>

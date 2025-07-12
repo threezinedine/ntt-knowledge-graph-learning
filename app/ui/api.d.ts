@@ -23,6 +23,9 @@ declare global {
 			loadFile: (filePath: string) => Promise<string | null>;
 			saveFile: (filePath: string, data: string) => Promise<void>;
 
+			saveAppData: (data: string) => Promise<void>;
+			loadAppData: () => Promise<string>;
+
 			openFolderDialog: (options: RenderDialogOptions) => Promise<DialogResult>;
 
 			checkFileExists: (filePath: string) => Promise<boolean>;

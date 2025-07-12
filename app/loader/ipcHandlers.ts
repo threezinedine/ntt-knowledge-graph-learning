@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, app } from 'electron';
 import {
 	EVENT_IS_WINDOW_MAXIMIZED,
 	EVENT_CLOSE_WINDOW,
@@ -15,10 +15,13 @@ import {
 	EVENT_PATH_JOIN,
 	EVENT_CHECK_DIR_EXIST,
 	EVENT_CREATE_DIR,
+	EVENT_SAVE_APP_DATA,
+	EVENT_LOAD_APP_DATA,
 } from './events';
 import { createNewProjectWindow, closeNewProjectWindow } from './projectwindow';
 import { openDialog, RenderDialogOptions } from './dialog';
 import path from 'path';
+import { APP_DATA_FILE_NAME } from './constants';
 
 export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_IS_WINDOW_MAXIMIZED, () => mainWindow.isMaximized());
@@ -40,6 +43,23 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_SAVE_FILE, (event, filePath: string, data: string): Promise<void> => {
 		fs.writeFileSync(filePath, data);
 		return Promise.resolve();
+	});
+
+	ipcMain.handle(EVENT_SAVE_APP_DATA, (event, data: string): Promise<void> => {
+		const appDataDir = app.getPath('userData');
+		const appDataFilePath = path.join(appDataDir, APP_DATA_FILE_NAME);
+		fs.writeFileSync(appDataFilePath, data);
+		return Promise.resolve();
+	});
+
+	ipcMain.handle(EVENT_LOAD_APP_DATA, (event): Promise<string> => {
+		const appDataDir = app.getPath('userData');
+		const appDataFilePath = path.join(appDataDir, APP_DATA_FILE_NAME);
+		if (!fs.existsSync(appDataFilePath)) {
+			return Promise.resolve(null);
+		}
+		const data = fs.readFileSync(appDataFilePath, 'utf8');
+		return Promise.resolve(data);
 	});
 
 	ipcMain.handle(EVENT_CREATE_NEW_PROJECT_WINDOW, createNewProjectWindow);

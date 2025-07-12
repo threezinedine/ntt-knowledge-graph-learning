@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import * as styles from './styles.module.scss';
 import clsx from 'clsx';
-import { UIConfig } from '@/configs';
+import { AppDataConfig, UIConfig } from '@/configs';
 import { Button } from '@/components';
 import { Project, useProject } from '@/contexts';
 import { Form, FormItem, Required, FormRef, FormValues, ProjectFileValidate } from '@/components/form';
@@ -24,8 +24,10 @@ function NewProject() {
 			values['project-path'].value as string,
 			values['project-name'].value as string,
 		]);
+		const projectFilePath = await window.electron.pathJoin([projectDir, PROJECT_FILE_NAME]);
 		projectClone.projectName = values['project-name'].value as string;
 		projectClone.projectDir = projectDir;
+		(await AppDataConfig.getInstance()).setLastProjectPath(projectFilePath);
 		await saveProject(projectClone);
 	}
 
