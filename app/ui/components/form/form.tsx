@@ -36,15 +36,15 @@ type FormError = string | null;
 const uiConfig = UIConfig.getInstance();
 
 export interface FormRef {
-	submit: () => boolean;
-	clean: () => void;
+	submit: () => Promise<boolean>;
+	clean: () => Promise<void>;
 }
 
 const Form = forwardRef<FormRef, FormProps>(
 	({ items, className, errorMessageColor = 'rgb(236, 97, 97)', onSubmit }, ref) => {
 		useImperativeHandle(ref, () => ({
-			submit: () => {
-				const newErrors = validateForm();
+			submit: async () => {
+				const newErrors = await validateForm();
 				if (newErrors.every((error) => error === null)) {
 					onSubmit?.(formValues);
 					setErrors(newErrors);
@@ -54,7 +54,7 @@ const Form = forwardRef<FormRef, FormProps>(
 					return false;
 				}
 			},
-			clean: () => {
+			clean: async () => {
 				const newFormValues: FormValues = JSON.parse(JSON.stringify(formValues));
 				Object.keys(newFormValues).forEach((key) => {
 					if (newFormValues[key].type === 'file') {
@@ -101,17 +101,21 @@ const Form = forwardRef<FormRef, FormProps>(
 			return errors;
 		});
 
-		function validateField(id: string, reload: boolean = false): FormError {
-			const value = formValues[id];
+		async function validateField(
+			id: string,
+			reload: boolean = false,
+			newValues: FormValues | null = null,
+		): Promise<FormError> {
+			const value = newValues ? newValues[id] : formValues[id];
 			const item = items.find((item) => item.id === id);
 			let newError: FormError | null = null;
 
-			item.validators?.forEach((validator: Validator) => {
-				const error = validator(value, formValues);
+			for (const validator of item.validators || []) {
+				const error = await validator(value, newValues || formValues);
 				if (error) {
 					newError = error;
 				}
-			});
+			}
 
 			if (reload) {
 				const newErrors = [...errors];
@@ -122,20 +126,20 @@ const Form = forwardRef<FormRef, FormProps>(
 			return newError;
 		}
 
-		function validateForm(): FormError[] {
+		async function validateForm(): Promise<FormError[]> {
 			const newErrors = [...errors];
 
-			items.forEach((item, index) => {
-				newErrors[index] = validateField(item.id);
-			});
+			for (const item of items) {
+				newErrors[items.findIndex((item) => item.id === item.id)] = await validateField(item.id);
+			}
 
 			return newErrors;
 		}
 
-		function onTextInputChange(id: string, value: string) {
+		async function onTextInputChange(id: string, value: string) {
 			const newFormValues = JSON.parse(JSON.stringify(formValues));
 			newFormValues[id].value = value;
-			validateField(id, true);
+			await validateField(id, true, newFormValues);
 			setFormValues(newFormValues);
 		}
 

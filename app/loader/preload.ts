@@ -12,6 +12,8 @@ import {
 	EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_CLOSE_NEW_PROJECT_WINDOW,
 	EVENT_OPEN_FOLDER_DIALOG,
+	EVENT_CHECK_FILE_EXISTS,
+	EVENT_PATH_JOIN,
 } from './events';
 import { RenderDialogOptions } from './dialog';
 
@@ -34,4 +36,7 @@ contextBridge.exposeInMainWorld('electron', {
 	loadJsonFile: (filePath: string) => ipcRenderer.invoke(EVENT_LOAD_JSON_FILE, filePath),
 
 	openFolderDialog: (options: RenderDialogOptions) => ipcRenderer.invoke(EVENT_OPEN_FOLDER_DIALOG, options),
+
+	checkFileExists: (filePath: string) => ipcRenderer.invoke(EVENT_CHECK_FILE_EXISTS, filePath),
+	pathJoin: (paths: string[]) => ipcRenderer.invoke(EVENT_PATH_JOIN, paths),
 });

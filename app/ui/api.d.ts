@@ -24,6 +24,9 @@ declare global {
 			saveJsonFile: (filePath: string, data: string) => Promise<void>;
 
 			openFolderDialog: (options: RenderDialogOptions) => Promise<DialogResult>;
+
+			checkFileExists: (filePath: string) => Promise<boolean>;
+			pathJoin: (paths: string[]) => Promise<string>;
 		};
 	}
 }

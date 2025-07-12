@@ -11,4 +11,4 @@ export type FormValues = {
 	[key: string]: Field;
 };
 
-export type Validator = (value: Field, formValues: FormValues) => string | null;
+export type Validator = (value: Field, formValues: FormValues) => Promise<string | null>;

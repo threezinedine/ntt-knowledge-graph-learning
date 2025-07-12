@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { UIConfig } from '@/configs';
 import { Button } from '@/components';
 import { useProject } from '@/contexts';
-import { Form, FormItem, Required, FormRef, FormValues } from '@/components/form';
+import { Form, FormItem, Required, FormRef, FormValues, HasNoFile } from '@/components/form';
 
 const uiConfig = UIConfig.getInstance();
 
@@ -48,13 +48,7 @@ function NewProject() {
 			label: 'Path',
 			type: 'file',
 			className: clsx(styles['form-item']),
-			validators: [Required],
-		},
-		{
-			id: 'test-number',
-			label: 'Test Number',
-			type: 'number',
-			className: clsx(styles['form-item']),
+			validators: [Required, HasNoFile('project.nttproj')],
 		},
 	];
 

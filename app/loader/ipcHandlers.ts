@@ -10,9 +10,12 @@ import {
 	EVENT_CREATE_NEW_PROJECT_WINDOW,
 	EVENT_CLOSE_NEW_PROJECT_WINDOW,
 	EVENT_OPEN_FOLDER_DIALOG,
+	EVENT_CHECK_FILE_EXISTS,
+	EVENT_PATH_JOIN,
 } from './events';
 import { createNewProjectWindow, closeNewProjectWindow } from './projectwindow';
 import { openDialog, RenderDialogOptions } from './dialog';
+import path from 'path';
 
 export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_IS_WINDOW_MAXIMIZED, () => mainWindow.isMaximized());
@@ -35,4 +38,11 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 	ipcMain.handle(EVENT_CLOSE_NEW_PROJECT_WINDOW, closeNewProjectWindow);
 
 	ipcMain.handle(EVENT_OPEN_FOLDER_DIALOG, (_, options: RenderDialogOptions) => openDialog(mainWindow, options));
+
+	ipcMain.handle(EVENT_CHECK_FILE_EXISTS, (_, filePath: string): Promise<boolean> => {
+		return Promise.resolve(fs.existsSync(filePath));
+	});
+	ipcMain.handle(EVENT_PATH_JOIN, (_, paths: string[]): Promise<string> => {
+		return Promise.resolve(path.join(...paths));
+	});
 }
