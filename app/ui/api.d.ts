@@ -38,6 +38,11 @@ declare global {
 			onProjectReload: (callback: () => Promise<void>) => void;
 			reloadProject: () => Promise<void>;
 		};
+
+		toast: {
+			addToast: (message: ToastMessage) => void;
+			removeToast: (id: string) => void;
+		};
 	}
 }
 

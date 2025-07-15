@@ -15,6 +15,20 @@ function Application(): React.ReactElement {
 	const loadProject = useProject((state) => state.loadProject);
 
 	useEffect(() => {
+		setTimeout(() => {
+			window.toast.addToast({
+				type: 'success',
+				message: 'Hello World',
+			});
+		}, 1000);
+
+		setTimeout(() => {
+			window.toast.addToast({
+				type: 'error',
+				message: 'Hello World',
+			});
+		}, 2000);
+
 		(async () => {
 			window.electron.onShouldCreateNewProjectWindow(async () => {
 				navigate('/new-project');

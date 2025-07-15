@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import * as styles from './styles.module.scss';
 import { UIConfig } from '@/configs';
 import { useSidebarStore } from '@/contexts';
+import { Toast } from '@/features';
 
 interface MainLayoutProps {
 	children: React.ReactNode;
@@ -75,6 +76,7 @@ export default function MainLayout({ children, title, footer, leftSidebar, right
 				</div>
 			</div>
 			<div className={clsx(styles['main-layout__footer'])}>{footer}</div>
+			<Toast />
 		</div>
 	);
 }
