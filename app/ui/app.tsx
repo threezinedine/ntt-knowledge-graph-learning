@@ -21,6 +21,16 @@ function Application(): React.ReactElement {
 				return Promise.resolve();
 			});
 
+			window.electron.onProjectReload(async () => {
+				const appDataConfig = await AppDataConfig.getInstance();
+				await appDataConfig.loadAppData();
+
+				const lastProjectPath = appDataConfig.getLastProjectPath();
+				if (lastProjectPath) {
+					await loadProject(lastProjectPath);
+				}
+			});
+
 			const appDataConfig = await AppDataConfig.getInstance();
 
 			const lastProjectPath = appDataConfig.getLastProjectPath();

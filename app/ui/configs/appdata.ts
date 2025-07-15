@@ -31,7 +31,7 @@ export default class AppDataConfig {
 		await window.electron.saveAppData(JSON.stringify(this.appData));
 	}
 
-	private async loadAppData() {
+	public async loadAppData() {
 		const appData = JSON.parse(await window.electron.loadAppData()) as AppData;
 		if (appData === null) {
 			this.appData = {

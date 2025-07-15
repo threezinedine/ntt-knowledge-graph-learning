@@ -26,3 +26,6 @@ export const EVENT_CHECK_DIR_EXIST = 'check-dir-exist';
 export const EVENT_CREATE_DIR = 'create-dir';
 
 export const EVENT_PATH_JOIN = 'path-join';
+
+export const EVENT_ON_PROJECT_RELOAD = 'on-project-reload';
+export const EVENT_RELOAD_PROJECT = 'reload-project';

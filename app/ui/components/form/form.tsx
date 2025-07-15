@@ -7,6 +7,8 @@ import { ComboBox, ComboBoxItem } from '../combobox';
 import { TextInput } from '../textinput';
 import Button from '../button';
 
+console.log(styles);
+
 interface FileOptions {
 	extensions?: string[]; // `folder` must be `false` or have no meanings
 	folder?: boolean; // if `true` then choose folder else file
@@ -164,7 +166,7 @@ const Form = forwardRef<FormRef, FormProps>(
 
 		return (
 			<div
-				className={clsx(styles['form'], className)}
+				className={clsx(styles['form-container'], className)}
 				style={
 					{
 						'--background-color': uiConfig.EditorBackgroundColor,

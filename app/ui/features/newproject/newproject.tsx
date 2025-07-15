@@ -38,6 +38,7 @@ function NewProject() {
 
 		if (await formRef.current.submit()) {
 			await formRef.current.clean();
+			await window.electron.reloadProject();
 			await window.electron.closeNewProjectWindow();
 		}
 	}

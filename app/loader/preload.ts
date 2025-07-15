@@ -19,6 +19,8 @@ import {
 	EVENT_SAVE_FILE,
 	EVENT_SAVE_APP_DATA,
 	EVENT_LOAD_APP_DATA,
+	EVENT_ON_PROJECT_RELOAD,
+	EVENT_RELOAD_PROJECT,
 } from './events';
 import { RenderDialogOptions } from './dialog';
 
@@ -52,4 +54,7 @@ contextBridge.exposeInMainWorld('electron', {
 	createDir: (dirPath: string) => ipcRenderer.invoke(EVENT_CREATE_DIR, dirPath),
 
 	pathJoin: (paths: string[]) => ipcRenderer.invoke(EVENT_PATH_JOIN, paths),
+
+	onProjectReload: (callback: () => Promise<void>) => ipcRenderer.on(EVENT_ON_PROJECT_RELOAD, callback),
+	reloadProject: () => ipcRenderer.invoke(EVENT_RELOAD_PROJECT),
 });

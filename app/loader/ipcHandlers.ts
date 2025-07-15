@@ -17,6 +17,8 @@ import {
 	EVENT_CREATE_DIR,
 	EVENT_SAVE_APP_DATA,
 	EVENT_LOAD_APP_DATA,
+	EVENT_ON_PROJECT_RELOAD,
+	EVENT_RELOAD_PROJECT,
 } from './events';
 import { createNewProjectWindow, closeNewProjectWindow } from './projectwindow';
 import { openDialog, RenderDialogOptions } from './dialog';
@@ -86,5 +88,10 @@ export function registerMainWindowHandlers(mainWindow: BrowserWindow) {
 
 	ipcMain.handle(EVENT_PATH_JOIN, (_, paths: string[]): Promise<string> => {
 		return Promise.resolve(path.join(...paths));
+	});
+
+	ipcMain.handle(EVENT_RELOAD_PROJECT, (_) => {
+		mainWindow.webContents.send(EVENT_ON_PROJECT_RELOAD);
+		return Promise.resolve();
 	});
 }

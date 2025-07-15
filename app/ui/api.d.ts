@@ -34,6 +34,9 @@ declare global {
 			createDir: (dirPath: string) => Promise<void>;
 
 			pathJoin: (paths: string[]) => Promise<string>;
+
+			onProjectReload: (callback: () => Promise<void>) => void;
+			reloadProject: () => Promise<void>;
 		};
 	}
 }

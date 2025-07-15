@@ -1,6 +1,6 @@
 import path from 'path';
-import { BrowserWindow } from 'electron';
-import { EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW } from './events';
+import { BrowserWindow, ipcMain } from 'electron';
+import { EVENT_ON_PROJECT_RELOAD, EVENT_RELOAD_PROJECT, EVENT_SHOULD_CREATE_NEW_PROJECT_WINDOW } from './events';
 
 let numberOfNewProjectWindow = 0;
 let newProjectWindow: BrowserWindow | null = null;
