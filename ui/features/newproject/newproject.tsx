@@ -63,7 +63,7 @@ function NewProject() {
 
 	return (
 		<div
-			className={clsx(styles['new-project'])}
+			className={clsx(styles['container'])}
 			style={
 				{
 					'--background-color': uiConfig.EditorBackgroundColor,
@@ -72,13 +72,13 @@ function NewProject() {
 				} as React.CSSProperties
 			}
 		>
-			<div className={clsx(styles['new-project-header'])}>
+			<div className={clsx(styles['header'])}>
 				<h1>New Project - {project.projectName || 'Untitled'}</h1>
 			</div>
-			<div className={clsx(styles['new-project-content'])}>
+			<div className={clsx(styles['content'])}>
 				<Form items={formItems} ref={formRef} onSubmit={handleSubmit} />
 			</div>
-			<div className={clsx(styles['new-project-footer'])}>
+			<div className={clsx(styles['footer'])}>
 				<Button
 					onClick={handleCancel}
 					className={clsx(styles['button'])}

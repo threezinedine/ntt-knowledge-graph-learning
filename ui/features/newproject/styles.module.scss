@@ -1,13 +1,13 @@
 $padding: 1rem;
 
-.new-project {
+.container {
 	background-color: var(--background-color);
 	height: 100%;
 	user-select: none;
 	display: flex;
 	flex-direction: column;
 
-	&-header {
+	.header {
 		-webkit-app-region: drag;
 		padding: $padding;
 		border-bottom: 1px solid var(--separator-color);
@@ -15,12 +15,86 @@ $padding: 1rem;
 		color: var(--text-color);
 	}
 
-	&-content {
+	.content {
 		flex: 1;
 		padding: $padding;
+		display: flex;
+		flex-direction: column;
+
+		&.option-page-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			width: 100%;
+		}
+
+		.cancel-button {
+			display: flex;
+			justify-content: flex-end;
+
+			&-btn {
+				padding: 0.8rem;
+				border-radius: 0.5rem;
+				margin-right: 1rem;
+			}
+		}
+
+		.open-project-content {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			gap: 5rem;
+			justify-content: center;
+		}
+
+		.option-page-buttons {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			gap: 5rem;
+			justify-content: center;
+			align-items: center;
+			margin: 0 4rem;
+
+			& .button {
+				width: 100%;
+				padding: 1.2rem;
+				border-radius: 0.5rem;
+				transform: translateY(0);
+				transition: transform 0.1s ease-in-out;
+
+				&:hover {
+					transform: translateY(-1px);
+				}
+			}
+
+			& .button-create {
+				color: #fff;
+				background-color: #2563eb;
+				box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2);
+
+				&:hover {
+					background-color: #3b82f6;
+					box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+				}
+			}
+
+			& .button-modify {
+				color: #1e40af;
+				border: 2px solid #1e40af;
+				box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+				background-color: transparent;
+
+				&:hover {
+					color: #3b82f6;
+					border: 2px solid #3b82f6;
+					box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+				}
+			}
+		}
 	}
 
-	&-footer {
+	.footer {
 		display: flex;
 		justify-content: flex-end;
 		gap: 1rem;

@@ -4,5 +4,5 @@ export { Sidebar } from './sidebar';
 export { FileTree } from './filetree';
 export { Community } from './communitiy';
 export { ContentSystem, type TabItem } from './contentsystem';
-export { NewProject } from './newproject';
+export * from './newproject';
 export { Toast } from './toast';
